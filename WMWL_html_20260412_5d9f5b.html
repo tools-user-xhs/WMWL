@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>社媒账号安全环境搭建助手 | 静态住宅IP + 封号应对方案 (可折叠模块)</title>
+    <!-- 引入Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- 使用现代字体: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f2f5;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+            color: #1e293b;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        .hero h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            display: inline-block;
+        }
+        .hero p {
+            color: #475569;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            background: #f8fafc;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+            border: 1px solid #eef2f6;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        
+        /* 可折叠标题栏样式 */
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            padding: 1.3rem 1.8rem;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+            border-bottom: 1px solid #eef2f6;
+            margin: 0;
+        }
+        .section-title:hover {
+            background: #fafcff;
+        }
+        .title-left {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .title-left i:first-child {
+            color: #3b82f6;
+            font-size: 1.4rem;
+        }
+        .toggle-icon {
+            color: #6c86a3;
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+        }
+        /* 内容区域 */
+        .card-content {
+            padding: 0 1.8rem 1.5rem 1.8rem;
+            transition: all 0.2s ease;
+        }
+        /* 折叠时隐藏内容 */
+        .card-content.collapsed {
+            display: none;
+        }
+        
+        /* 内部组件样式保留 */
+        .btn-primary {
+            background: #1e40af;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 500;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .btn-primary i {
+            font-size: 1rem;
+        }
+        .btn-primary:hover {
+            background: #1e3a8a;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px -8px rgba(30,64,175,0.3);
+        }
+
+        .reason-result {
+            margin-top: 1.5rem;
+            background: #f9fafb;
+            border-radius: 24px;
+            padding: 0.2rem;
+        }
+        .reason-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .reason-item {
+            background: white;
+            border-radius: 20px;
+            padding: 1rem 1.2rem;
+            border: 1px solid #e9edf2;
+        }
+        .reason-item strong {
+            font-size: 1.05rem;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .reason-item strong i {
+            color: #dc2626;
+            font-size: 1rem;
+        }
+        .reason-desc {
+            color: #334155;
+            font-size: 0.9rem;
+            line-height: 1.45;
+            margin-left: 1.8rem;
+        }
+        .badge-risk {
+            background: #fee2e2;
+            color: #b91c1c;
+            font-size: 0.7rem;
+            border-radius: 40px;
+            padding: 2px 10px;
+            margin-left: 8px;
+            font-weight: 500;
+        }
+
+        .ip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.2rem;
+            margin: 1.2rem 0 1.8rem 0;
+        }
+        .ip-card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #eef2ff;
+            padding: 1.2rem;
+            transition: all 0.2s;
+        }
+        .ip-card h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .ip-type-tag {
+            font-size: 0.7rem;
+            background: #eef2ff;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            color: #1e40af;
+        }
+        .pros, .cons {
+            margin: 0.6rem 0;
+            font-size: 0.85rem;
+        }
+        .pros span, .cons span {
+            font-weight: 600;
+            display: inline-block;
+            width: 48px;
+        }
+        .pros { color: #15803d; }
+        .cons { color: #b45309; }
+        .recommend-badge {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 1rem 1.2rem;
+            border-radius: 18px;
+            margin-top: 0.8rem;
+        }
+        .highlight {
+            background: linear-gradient(120deg, #e0f2fe, #ffffff);
+            padding: 1.2rem;
+            border-radius: 20px;
+            margin-top: 0.8rem;
+        }
+        .vendor-info {
+            background: #f8fafc;
+            border-radius: 24px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .vendor-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #0f172a;
+        }
+        .vendor-url {
+            font-family: monospace;
+            background: #eef2ff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            display: inline-block;
+            font-size: 0.85rem;
+            margin: 0.5rem 0 0.2rem;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #3b82f6;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            color: #1e40af;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .btn-outline:hover {
+            background: #eef2ff;
+            transform: translateY(-1px);
+        }
+        .steps {
+            margin-top: 1rem;
+            padding-left: 1.2rem;
+        }
+        .steps li {
+            margin: 0.7rem 0;
+            line-height: 1.4;
+        }
+        .solution-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.3rem;
+        }
+        .solution-step {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #eef2ff;
+            padding: 1rem 1.3rem;
+            transition: all 0.2s;
+        }
+        .solution-step h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #0f172a;
+        }
+        .solution-step p, .solution-step ul {
+            margin-left: 1.8rem;
+            font-size: 0.9rem;
+            color: #2c3e50;
+        }
+        .solution-step ul {
+            padding-left: 1.2rem;
+        }
+        .solution-step li {
+            margin: 0.4rem 0;
+        }
+        .fingerprint-links {
+            margin-top: 12px;
+            background: #f1f5f9;
+            border-radius: 18px;
+            padding: 0.7rem 1rem;
+            display: inline-block;
+        }
+        .appeal-template {
+            background: #fefce8;
+            border-left: 5px solid #eab308;
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            margin-top: 0.8rem;
+        }
+        .empty-state {
+            background: #f1f5f9;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            text-align: center;
+            color: #64748b;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1.5rem;
+        }
+        @media (max-width: 680px) {
+            body {
+                padding: 1rem;
+            }
+            .section-title {
+                padding: 1rem 1.2rem;
+                font-size: 1.2rem;
+            }
+            .card-content {
+                padding: 0 1.2rem 1.2rem 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1><i class="fas fa-shield-alt" style="color: #3b82f6;"></i> 社媒账号安全环境搭建助手</h1>
+        <p>针对Facebook / 外贸社媒账号频繁封禁的深度诊断 · 静态住宅IP纯净方案 · 一站式指导工具 · 含账号解封实战策略 · 点击标题折叠/展开模块</p>
+    </div>
+
+    <!-- 模块1：封号原因剖析（可折叠） -->
+    <div class="card">
+        <div class="section-title" data-target="content1">
+            <div class="title-left">
+                <i class="fas fa-search"></i>
+                <span>① 外贸社媒账号封号原因剖析</span>
+            </div>
+            <i class="fas fa-chevron-up toggle-icon"></i>
+        </div>
+        <div id="content1" class="card-content">
+            <div style="display: flex; justify-content: flex-start; margin-bottom: 0.5rem;">
+                <button id="queryReasonBtn" class="btn-primary"><i class="fas fa-chart-simple"></i> 查询封号原因</button>
+            </div>
+            <div id="reasonResultContainer" class="reason-result">
+                <div class="empty-state">
+                    <i class="fas fa-info-circle" style="font-size: 1.8rem; opacity: 0.6;"></i>
+                    <p style="margin-top: 10px;">点击上方“查询封号原因”按钮，获取结构化剖析报告</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模块2：IP地址类型对比分析（可折叠） -->
+    <div class="card">
+        <div class="section-title" data-target="content2">
+            <div class="title-left">
+                <i class="fas fa-network-wired"></i>
+                <span>② IP地址类型对比分析 · 针对性解决方案</span>
+            </div>
+            <i class="fas fa-chevron-up toggle-icon"></i>
+        </div>
+        <div id="content2" class="card-content">
+            <div class="ip-grid">
+                <div class="ip-card" style="border: 1px solid #10b981; background: #fefdf5;">
+                    <h4>🏠 静态住宅IP <span class="ip-type-tag" style="background:#d1fae5;">纯净版⭐</span></h4>
+                    <div class="pros"><span>✅ 优势</span> 真实ISP分配，完全住宅属性，独立纯净无滥用记录，IP地理位置长期固定，风控分数极低。</div>
+                    <div class="cons"><span>⚠️ 劣势</span> 价格相对较高，资源稀缺，需选择靠谱供应商。</div>
+                    <div style="font-size:0.8rem; margin-top:8px;">🎯 适用：社媒矩阵、电商店铺、广告账户长期运营</div>
+                </div>
+                <div class="ip-card">
+                    <h4>🔄 动态住宅IP <span class="ip-type-tag">轮换池</span></h4>
+                    <div class="pros"><span>✅ 优势</span> 真实住宅网络池，价格适中，匿名性尚可。</div>
+                    <div class="cons"><span>⚠️ 劣势</span> IP频繁变动导致账号地理位置跳跃，易触发二次验证或临时风控，不适合稳定登录。</div>
+                </div>
+                <div class="ip-card">
+                    <h4>🏢 数据中心IP <span class="ip-type-tag">VPS/云主机</span></h4>
+                    <div class="pros"><span>✅ 优势</span> 价格低廉，速度快，带宽大。</div>
+                    <div class="cons"><span>⚠️ 劣势</span> IP段被社媒平台严格监控，极易被识别为机器人或代理，封号风险极高。</div>
+                </div>
+                <div class="ip-card">
+                    <h4>📱 移动蜂窝IP <span class="ip-type-tag">4G/5G</span></h4>
+                    <div class="pros"><span>✅ 优势</span> 动态基站IP，较高匿名度。</div>
+                    <div class="cons"><span>⚠️ 劣势</span> 延迟不稳定，IP切换频繁，部分平台限制，维护成本高。</div>
+                </div>
+            </div>
+            <div class="recommend-badge">
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <i class="fas fa-thumbs-up" style="color: #10b981; font-size: 1.5rem;"></i>
+                    <strong style="font-size: 1.2rem;">首选方案：静态住宅IP纯净版</strong>
+                </div>
+                <div style="margin-top: 12px; line-height: 1.55;">
+                    <p>✅ <strong>核心原因：</strong>Facebook、Instagram等主流社媒平台的风控系统会深度分析IP的“住宅属性”与“历史行为”。静态住宅IP纯净版由当地运营商直接分配给真实家庭，IP信誉度极高，长期保持不变的地理位置与网络环境，完美模拟真实用户登录场景，极大降低“账号异常”判定概率。</p>
+                    <p>✅ <strong>其他优势：</strong>无共享污染、不会因为其他人违规操作牵连你的账号；支持绑定指定设备指纹；适合长期稳定运营外贸账号、广告投放及社群管理。相比动态IP轮换，杜绝IP漂移引发的验证问题。</p>
+                    <p>🎯 <strong>结论：</strong>针对反复封号且已确认是IP原因的场景，升级为静态住宅IP纯净版是最彻底、高效的解决方案。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模块3：具体解决方案 供应商 + 指引（可折叠） -->
+    <div class="card">
+        <div class="section-title" data-target="content3">
+            <div class="title-left">
+                <i class="fas fa-gear"></i>
+                <span>③ 具体解决方案 · 落地执行</span>
+            </div>
+            <i class="fas fa-chevron-up toggle-icon"></i>
+        </div>
+        <div id="content3" class="card-content">
+            <div class="vendor-info">
+                <div class="vendor-name">
+                    <i class="fas fa-globe"></i> 量子跃动
+                    <span style="font-size: 0.8rem; background:#e2e8f0; padding:2px 8px; border-radius:30px;">专业住宅代理服务商</span>
+                </div>
+                <div style="margin: 8px 0 6px 0;">
+                    <span class="vendor-url"><i class="fas fa-link"></i> 官网：https://www.lzproxy.com/</span>
+                </div>
+                <p style="font-size: 0.9rem; color: #334155;">量子跃动提供全球范围的静态住宅IP纯净版资源，IP池严格筛选，确保100%真实家庭宽带，支持SOCKS5/HTTP代理，适合Facebook、TikTok、亚马逊等平台的稳定运营。</p>
+            </div>
+            <div style="margin-bottom: 1.6rem; background: #f1f5f9; border-radius: 20px; padding: 1rem 1.3rem;">
+                <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: space-between;">
+                    <div>
+                        <i class="fas fa-door-open" style="color: #2563eb;"></i>
+                        <strong style="margin-left: 6px;">供应商入口网址：</strong>
+                        <code style="background: #eef2ff; padding: 4px 12px; border-radius: 40px; font-size: 0.85rem;">https://www.lzproxy.com/</code>
+                    </div>
+                    <a href="https://www.lzproxy.com/" target="_blank" rel="noopener noreferrer" class="btn-outline">
+                        <i class="fas fa-arrow-up-right-from-square"></i> 立即访问官网
+                    </a>
+                </div>
+            </div>
+            <div>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                    <i class="fas fa-list-check" style="color: #3b82f6;"></i>
+                    <strong style="font-size: 1.1rem;">📘 供应商网站使用指引</strong>
+                </div>
+                <ul class="steps" style="list-style-type: none; padding-left: 0;">
+                    <li style="display: flex; gap: 12px; margin-bottom: 14px;"><span style="background: #3b82f6; color: white; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 60px; font-size: 0.8rem; font-weight: bold;">1</span> 访问量子跃动官网 lzproxy.com 注册账户（使用邮箱/手机）</li>
+                    <li style="display: flex; gap: 12px; margin-bottom: 14px;"><span style="background: #3b82f6; color: white; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 60px; font-size: 0.8rem; font-weight: bold;">2</span> 在产品中心选择「静态住宅IP纯净版」 → 选择所需国家/地区（建议与社媒账号信息一致）</li>
+                    <li style="display: flex; gap: 12px; margin-bottom: 14px;"><span style="background: #3b82f6; color: white; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 60px; font-size: 0.8rem; font-weight: bold;">3</span> 根据需求购买套餐，完成后前往“仪表盘”获取代理信息（IP、端口、账号密码）</li>
+                    <li style="display: flex; gap: 12px; margin-bottom: 14px;"><span style="background: #3b82f6; color: white; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 60px; font-size: 0.8rem; font-weight: bold;">4</span> 配置到指纹浏览器或本地代理工具，验证IP后登录账号。</li>
+                </ul>
+                <div class="highlight">
+                    <i class="fas fa-lightbulb" style="color: #f59e0b;"></i> <strong>专业建议：</strong> 搭配指纹浏览器 + 静态住宅IP纯净版，模拟真实设备与网络环境，彻底规避账号关联风险。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模块4：封号应对与长期解决方案（可折叠） -->
+    <div class="card">
+        <div class="section-title" data-target="content4">
+            <div class="title-left">
+                <i class="fas fa-life-ring"></i>
+                <span>④ 封号应对与长期解决方案 · 从解封到永久预防</span>
+            </div>
+            <i class="fas fa-chevron-up toggle-icon"></i>
+        </div>
+        <div id="content4" class="card-content">
+            <div class="solution-grid">
+                <div class="solution-step">
+                    <h4><i class="fas fa-bell" style="color:#dc2626;"></i> 1. 账号被封后的即时行动（黄金48小时）</h4>
+                    <p>✔ 保留所有证据：记录封号提示截图、关联邮箱/手机收到的通知。<br>
+                    ✔ 不要立即创建新账号，避免设备指纹关联导致连锁封禁。<br>
+                    ✔ 检查当前IP环境：访问 ipinfo.io 查看IP类型（若为数据中心或黑名单IP，立刻更换为静态住宅纯净IP）。<br>
+                    ✔ 清理浏览器缓存/Cookie，或使用全新的指纹浏览器环境。</p>
+                </div>
+                <div class="solution-step">
+                    <h4><i class="fas fa-file-alt" style="color:#2563eb;"></i> 2. 高效申诉策略（Facebook为例）</h4>
+                    <p><strong>申诉入口：</strong> 登录页提示封禁时点击“申诉”或访问 <a href="https://www.facebook.com/help/contact/357439354283578" target="_blank" style="color:#2563eb;">Facebook官方申诉表单</a>。准备身份证明（身份证/护照）及账号历史信息。</p>
+                    <div class="appeal-template">
+                        <i class="fas fa-quote-left"></i> <strong>申诉信模板（强调IP已优化为纯净住宅）：</strong><br>
+                        “尊敬的审核团队，我的账号【账号名/邮箱】被误判为违反社区准则。本人一直遵守平台规则，经排查近期因使用了不安全的代理IP导致登录异常。目前我已经更换为当地运营商分配的静态住宅IP，网络环境已完全合规。恳请重新审核并恢复账号权益。附件为身份证明与IP归属截图。”
+                    </div>
+                    <p style="margin-top: 10px;">📌 提交后注意查收邮箱/手机验证，通常在2-7天内回复。如被拒可再次补充设备环境截图，保持语气诚恳。</p>
+                </div>
+                <div class="solution-step">
+                    <h4><i class="fas fa-globe-asia" style="color:#10b981;"></i> 3. 环境重建：静态住宅IP + 纯净设备指纹</h4>
+                    <p>✅ 根据模块③选购量子跃动静态住宅IP纯净版，确保IP地理位置与账号资料国家匹配。<br>
+                    ✅ 推荐使用指纹浏览器为每个账号创建独立环境，并绑定唯一的静态住宅IP。<br>
+                    ✅ 主流指纹浏览器官方入口（点击直达）：<br>
+                    <span style="display: inline-flex; gap: 1rem; flex-wrap: wrap; margin-top: 8px;">
+                        <a href="https://www.adspower.net/" target="_blank" rel="noopener" style="background:#eef2ff; padding:4px 14px; border-radius: 40px; text-decoration: none; color:#1e40af; font-weight:500;"><i class="fas fa-fingerprint"></i> AdsPower 指纹浏览器</a>
+                        <a href="https://www.bitbrowser.cn/" target="_blank" rel="noopener" style="background:#eef2ff; padding:4px 14px; border-radius: 40px; text-decoration: none; color:#1e40af; font-weight:500;"><i class="fas fa-browser"></i> 比特浏览器 BitBrowser</a>
+                        <a href="https://www.vmlogin.com/" target="_blank" rel="noopener" style="background:#eef2ff; padding:4px 14px; border-radius: 40px; text-decoration: none; color:#1e40af; font-weight:500;"><i class="fas fa-vr-cardboard"></i> VMlogin</a>
+                    </span><br>
+                    ✅ 配置浏览器语言、时区、分辨率与IP所在地一致，关闭WebRTC泄露。<br>
+                    ✅ 首次登录新环境后，先进行“养号”操作：完善个人资料、添加真实好友、每日正常浏览，避免激进营销行为。</p>
+                    <div class="fingerprint-links" style="background: #e6f7ff; border-radius: 20px; margin-top: 12px;">
+                        <i class="fas fa-info-circle"></i> 💡 提示：点击上方指纹浏览器名称可直接访问官网下载，搭配静态住宅IP使用效果最佳。
+                    </div>
+                </div>
+                <div class="solution-step">
+                    <h4><i class="fas fa-chart-line" style="color:#f59e0b;"></i> 4. 长期健康运营规范（避免再次封号）</h4>
+                    <ul>
+                        <li>🔹 固定使用同一静态住宅IP，不频繁更换节点或国家。</li>
+                        <li>🔹 新账号初期避免大量加好友/群发消息/频繁发布广告链接，模拟真人节奏。</li>
+                        <li>🔹 开启双重验证（2FA），绑定手机号并信任当前设备。</li>
+                        <li>🔹 定期检查IP信誉（使用IP评分工具），如发现异常及时联系供应商更换。</li>
+                        <li>🔹 不同社媒账号之间使用独立浏览器环境+不同静态住宅IP，防止跨平台关联。推荐使用上述 <a href="https://www.adspower.net/" target="_blank">AdsPower</a> 或 <a href="https://www.bitbrowser.cn/" target="_blank">比特浏览器</a> 进行多账号隔离。</li>
+                        <li>🔹 关注Facebook政策更新，避免使用外挂或自动化工具。</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight" style="margin-top: 1rem; background: #eef2ff;">
+                <i class="fas fa-check-circle" style="color:#2563eb;"></i> <strong>综合结论：</strong> 解决外贸社媒账号封号问题 = 静态住宅IP纯净版 + 精准申诉策略 + 长期稳定环境 + 合规行为。按照上述四步执行，可大幅降低封号概率，即使被误封也能高效申诉回账号。
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <i class="fas fa-shield-heart"></i> 本工具仅供技术指导，请遵守相关平台政策及当地法律法规。选择合规代理服务，保障账号资产安全。
+    </footer>
+</div>
+
+<script>
+    // 折叠功能实现
+    const sectionTitles = document.querySelectorAll('.section-title');
+    
+    function toggleContent(targetId, iconElem) {
+        const contentDiv = document.getElementById(targetId);
+        if (!contentDiv) return;
+        const isCollapsed = contentDiv.classList.contains('collapsed');
+        if (isCollapsed) {
+            contentDiv.classList.remove('collapsed');
+            if (iconElem) {
+                iconElem.classList.remove('fa-chevron-down');
+                iconElem.classList.add('fa-chevron-up');
+            }
+        } else {
+            contentDiv.classList.add('collapsed');
+            if (iconElem) {
+                iconElem.classList.remove('fa-chevron-up');
+                iconElem.classList.add('fa-chevron-down');
+            }
+        }
+    }
+    
+    sectionTitles.forEach(title => {
+        const targetId = title.getAttribute('data-target');
+        const iconElem = title.querySelector('.toggle-icon');
+        if (targetId && iconElem) {
+            // 初始状态均为展开，图标为chevron-up
+            title.addEventListener('click', (e) => {
+                // 防止点到内部链接冒泡干扰
+                e.stopPropagation();
+                toggleContent(targetId, iconElem);
+            });
+        }
+    });
+    
+    // 模块1的查询原因功能保持不变
+    const reasonData = [
+        {
+            title: "🌐 IP地址来源风险 (首要因素)",
+            description: "使用的IP属于数据中心机房或已被污染代理池，Facebook会直接标记为可疑流量。纯净住宅IP缺失导致信任分极低。",
+            tag: "高关联"
+        },
+        {
+            title: "🔁 频繁更换IP / 地理位置跳跃",
+            description: "动态IP或节点切换导致每次登录IP所在城市/国家变化，触发“异常登录”风控，要求验证身份或直接临时封锁。",
+            tag: "高危"
+        },
+        {
+            title: "🚫 共享IP黑名单 & 连带责任",
+            description: "很多廉价代理IP为数百人共用，若其中某个账号违规，该IP段整体纳入灰/黑名单，导致无辜账号受牵连封禁。",
+            tag: "典型诱因"
+        },
+        {
+            title: "🧩 设备指纹与IP不匹配",
+            description: "浏览器时区、语言、Canvas指纹与IP所属地区差异过大，高级风控模型判定为伪造环境，即使IP本身干净也会触发验证。",
+            tag: "复合风险"
+        },
+        {
+            title: "⚡ 账号行为异常+低质量IP叠加",
+            description: "加好友过快、频繁发帖等行为在高质量IP上可能只是限制，在低质量IP上直接封停。IP信誉度决定风控阈值高低。",
+            tag: "加速封禁"
+        }
+    ];
+    
+    const container = document.getElementById('reasonResultContainer');
+    const queryBtn = document.getElementById('queryReasonBtn');
+    
+    function renderReasonAnalysis() {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'reason-list';
+        
+        const summaryDiv = document.createElement('div');
+        summaryDiv.style.background = "#eff6ff";
+        summaryDiv.style.borderRadius = "20px";
+        summaryDiv.style.padding = "12px 16px";
+        summaryDiv.style.marginBottom = "16px";
+        summaryDiv.style.borderLeft = "4px solid #3b82f6";
+        summaryDiv.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-chart-line" style="color:#2563eb;"></i>
+                <strong style="font-size:0.95rem;">IP质量是账号存活的核心命脉</strong>
+            </div>
+            <p style="font-size:0.85rem; margin-top:8px; color:#1e293b;">根据大量外贸社群及Facebook风控白皮书，超过67%的“无故封号”均与IP环境不纯净直接相关。以下为结构化原因剖析：</p>
+        `;
+        wrapper.appendChild(summaryDiv);
+        
+        reasonData.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'reason-item';
+            itemDiv.innerHTML = `
+                <strong><i class="fas fa-exclamation-triangle"></i> ${item.title} <span class="badge-risk">${item.tag}</span></strong>
+                <div class="reason-desc">${item.description}</div>
+            `;
+            wrapper.appendChild(itemDiv);
+        });
+        
+        const solutionHint = document.createElement('div');
+        solutionHint.style.marginTop = "1rem";
+        solutionHint.style.background = "#fef9e3";
+        solutionHint.style.borderRadius = "18px";
+        solutionHint.style.padding = "0.9rem 1rem";
+        solutionHint.style.border = "1px solid #fde68a";
+        solutionHint.innerHTML = `
+            <div style="display:flex; gap:10px; align-items:center;">
+                <i class="fas fa-screwdriver-wrench" style="color:#d97706;"></i>
+                <span><strong>📌 根治方案：</strong>切换至「静态住宅IP纯净版」并固定设备环境，可从根源解决上述风险，详情参考下方模块②推荐与③供应商指引，并配合模块④的解封与预防策略。</span>
+            </div>
+        `;
+        wrapper.appendChild(solutionHint);
+        
+        container.innerHTML = '';
+        container.appendChild(wrapper);
+    }
+    
+    if (queryBtn) {
+        queryBtn.addEventListener('click', () => {
+            renderReasonAnalysis();
+            document.getElementById('reasonResultContainer')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+    }
+</script>
+</body>
+</html>
