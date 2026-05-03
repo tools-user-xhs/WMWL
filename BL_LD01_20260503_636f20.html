@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+<title>Bill of Loading</title>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#eef2f6;font-family:'Segoe UI',Roboto,sans-serif;padding:30px 20px}
+.app-container{max-width:1600px;margin:0 auto;display:flex;flex-wrap:wrap;gap:28px}
+.editor-panel{flex:1.2;min-width:320px;background:#fff;border-radius:24px;box-shadow:0 12px 28px -8px rgba(0,0,0,0.1);padding:20px 24px}
+.bl-preview{flex:2;min-width:580px;background:#fefefe;border-radius:24px;box-shadow:0 20px 30px -12px rgba(0,0,0,0.15);padding:20px 24px}
+.section-title{font-size:1.2rem;font-weight:700;border-left:5px solid #1e3a8a;padding-left:12px;margin:22px 0 16px 0;color:#0f172a}
+.section-title:first-of-type{margin-top:0}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 18px;margin-bottom:10px}
+.field-group{display:flex;flex-direction:column;gap:6px}
+.field-group label{font-weight:700;font-size:.75rem;text-transform:uppercase;color:#334155}
+.field-group input,.field-group select{padding:8px 10px;border:1px solid #cbd5e1;border-radius:12px;font-size:.85rem;background:#fafcff}
+.goods-table-wrapper{overflow-x:auto;margin:15px 0;border:1px solid #e2e8f0;border-radius:16px}
+.goods-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.goods-table th,.goods-table td{border-bottom:1px solid #e2e8f0;padding:10px 6px;text-align:left}
+.goods-table th{background:#f1f5f9;font-weight:800}
+.goods-table input{width:90px;padding:6px 4px;border:1px solid #cbd5e1;border-radius:8px}
+.goods-table select{width:75px;padding:6px 4px;border:1px solid #cbd5e1;border-radius:8px}
+.img-preview-sm{width:50px;height:50px;object-fit:cover;border-radius:10px;background:#f1f5f9;border:1px solid #cbd5e1;cursor:pointer}
+.btn-icon{background:#eef2ff;border:0;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:.7rem}
+.add-row-btn{background:#2563eb;color:#fff;border:0;padding:8px 20px;border-radius:40px;font-weight:600;font-size:.8rem;margin-top:10px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+.action-buttons{display:flex;flex-wrap:wrap;gap:14px;margin:25px 0 10px}
+.btn-primary{background:#1e3a8a;color:#fff;border:0;padding:10px 22px;border-radius:40px;font-weight:700;cursor:pointer}
+.btn-outline{background:#fff;border:1.5px solid #1e3a8a;color:#1e3a8a;padding:10px 22px;border-radius:40px;font-weight:700;cursor:pointer}
+.btn-sm{padding:5px 12px;font-size:.75rem}
+.upload-area{background:#f8fafc;border:1px dashed #94a3b8;border-radius:28px;padding:20px 15px;text-align:center;margin-bottom:20px}
+.bl-document{font-family:'Times New Roman',SimSun,serif;background:#fff;padding:20px 25px;border:1px solid #2c3e66}
+.bl-header{text-align:center;border-bottom:2px solid #1e3a8a;margin-bottom:18px;padding-bottom:12px}
+.bl-header h1{font-size:26px;font-weight:800;color:#0b2b5c}
+.bl-row{display:flex;border-bottom:1px solid #aaa;margin-bottom:6px}
+.bl-label{width:32%;font-weight:700;font-size:11px;background:#f4f6f9;padding:8px 10px;border-right:1px solid #ccc;text-transform:uppercase}
+.bl-value{width:68%;padding:8px 12px;font-size:11px;word-break:break-word}
+.two-columns{display:flex;gap:8px;margin:8px 0}
+.col{flex:1}
+.weight-measure-row{display:flex;border:1px solid #8b8f9c;margin:8px 0}
+.weight-cell,.measure-cell{flex:1;border-right:1px solid #8b8f9c;padding:8px 12px}
+.measure-cell{border-right:none}
+.freight-info-row{display:flex;border:1px solid #8b8f9c;margin:10px 0}
+.freight-cell-left,.freight-cell-right{flex:1;padding:10px 12px}
+.freight-cell-left{border-right:1px solid #8b8f9c}
+.issuance-cell{display:flex;border:1px solid #8b8f9c;margin:10px 0}
+.issuance-left,.issuance-right{flex:1;padding:10px 14px}
+.issuance-left{border-right:1px solid #8b8f9c}
+.cell-label{font-weight:800;font-size:10px;text-transform:uppercase;background:#f8f9fc;display:inline-block;margin-bottom:6px;border-bottom:1px dotted #aaa}
+.cell-value{font-size:11px;font-weight:600}
+.goods-section{margin:18px 0;border:1px solid #7f8c8d;overflow-x:auto}
+.goods-table-bl{width:100%;border-collapse:collapse;font-size:10px}
+.goods-table-bl th,.goods-table-bl td{border:1px solid #aaa;padding:6px 4px}
+.goods-table-bl th{background:#e9ecef;font-weight:800}
+.tiny-img{max-width:55px;max-height:45px;border-radius:6px}
+.package-row{border:1px solid #8b8f9c;margin:8px 0;padding:8px 12px}
+@media print{body{background:#fff;padding:0;margin:0}.editor-panel,.action-buttons,.upload-area,.btn-primary,.btn-outline,.add-row-btn{display:none!important}.bl-preview{box-shadow:none;padding:0;margin:0;width:100%}.bl-document{border:none;padding:.2in}}
+.inline-help{font-size:.7rem;color:#475569;margin-top:4px}
+.print-note{font-size:.7rem;background:#fef9e3;padding:6px 10px;border-radius:12px;margin-top:12px;color:#92400e}
+.quick-buttons{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0 5px}
+.toast-tip{position:fixed;top:20px;left:50%;transform:translateX(-50%);background-color:#10b981;color:#fff;padding:10px 24px;border-radius:40px;font-size:.9rem;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none}
+.copyright{text-align:center;font-size:11px;color:#6c757d;margin-top:20px;padding-top:12px;border-top:1px solid #dee2e6}
+.inline-unit{display:flex;align-items:center;gap:4px}
+.inline-unit input{flex:1}
+</style>
+</head>
+<body>
+<div class="app-container">
+<div class="editor-panel">
+<div class="upload-area">
+<div style="font-weight:700;margin-bottom:8px;">📥 Excel 模板导入</div>
+<div class="quick-buttons">
+<button id="downloadBtn" class="btn-primary btn-sm">📎 下载导入模板 (Excel)</button>
+<button id="importBtn" class="btn-outline btn-sm">📂 导入 Excel/CSV/TXT</button>
+<input type="file" id="fileInput" accept=".xlsx,.xls,.csv,.txt" style="display:none">
+</div>
+<div class="inline-help">模板包含两个工作表："Shipping"和"Products"。填写后点击导入按钮自动填充。</div>
+</div>
+
+<div class="section-title">📌 发运信息</div>
+<div class="form-grid">
+<div class="field-group"><label>Shipper</label><input type="text" id="shipper" value="NINGBO JIANGDONG IMP & EXP CO.,LTD."></div>
+<div class="field-group"><label>Consignee</label><input type="text" id="consignee" value="TO THE ORDER OF SHIPPER"></div>
+<div class="field-group"><label>Notify Party</label><input type="text" id="notifyParty" value="SAME AS CONSIGNEE"></div>
+<div class="field-group"><label>B/L No.</label><input type="text" id="blno" value="COSU6688991122"></div>
+<div class="field-group"><label>Pre-carriage by</label><input type="text" id="preCarriage" value=""></div>
+<div class="field-group"><label>Place of Receipt</label><input type="text" id="receiptPlace" value="NINGBO, CHINA"></div>
+<div class="field-group"><label>Ocean Vessel / Voy No.</label><input type="text" id="vessel" value="CMA CGM ALHAMBRA / 0FM6HW"></div>
+<div class="field-group"><label>Port of Loading</label><input type="text" id="pol" value="NINGBO, CHINA"></div>
+<div class="field-group"><label>Port of Discharge</label><input type="text" id="pod" value="HAMBURG, GERMANY"></div>
+<div class="field-group"><label>Place of Delivery</label><input type="text" id="deliveryPlace" value="HAMBURG, GERMANY"></div>
+<div class="field-group"><label>Container / Seal No.</label><input type="text" id="containerNo" value="MSCU9876543 / 112233"></div>
+<div class="field-group"><label>Marks & Nos.</label><input type="text" id="marks" value=""></div>
+</div>
+
+<div class="section-title">📦 产品明细</div>
+<div class="goods-table-wrapper">
+<table class="goods-table" id="productTable">
+<thead><tr><th>图片</th><th>产品名称</th><th>单价(货币)</th><th>数量(单位)</th><th>总价</th><th>操作</th></tr></thead>
+<tbody id="productTbody"></tbody>
+</table>
+</div>
+<button class="add-row-btn" id="addProductBtn">+ 添加产品</button>
+
+<div class="section-title">📊 重量 / 体积 / 运费</div>
+<div class="form-grid">
+<div class="field-group"><label>毛重</label><div class="inline-unit"><input type="text" id="grossWeight" value="1250"><select id="grossWeightUnit"><option value="kg">kg</option><option value="lbs">lbs</option><option value="tons">tons</option></select></div></div>
+<div class="field-group"><label>体积</label><div class="inline-unit"><input type="text" id="measurement" value="3.45"><select id="measurementUnit"><option value="CBM">CBM</option><option value="CF">CF</option><option value="L">L</option></select></div></div>
+<div class="field-group"><label>总件数</label><div class="inline-unit"><input type="text" id="totalPackages" value="22"><select id="packagesUnit"><option value="PALLETS">PALLETS</option><option value="BOXES">BOXES</option><option value="PIECES">PIECES</option></select></div></div>
+<div class="field-group"><label>运费条款</label><select id="freightTerm"><option value="PREPAID">PREPAID</option><option value="COLLECT">COLLECT</option></select></div>
+<div class="field-group"><label>货物总价值</label><input type="text" id="totalGoodsValue" readonly style="background:#f1f5f9;"></div>
+</div>
+
+<div class="section-title">✍️ 签发与单据</div>
+<div class="form-grid">
+<div class="field-group"><label>Total Prepaid</label><input type="text" id="totalPrepaidText" value="AS ARRANGED"></div>
+<div class="field-group"><label>正本提单份数</label><input type="text" id="originalBLCount" value="3 (THREE)"></div>
+</div>
+
+<div class="action-buttons">
+<button id="generateBtn" class="btn-primary">📄 生成提单</button>
+<button id="printBtn" class="btn-outline">🖨️ 打印</button>
+<button id="pdfBtn" class="btn-outline">📑 保存为 PDF</button>
+</div>
+<div class="copyright">© 2025 Bill of Loading Tool. All rights reserved.</div>
+</div>
+
+<div class="bl-preview">
+<div id="previewContainer" class="bl-document"><div style="text-align:center;padding:80px 0;">点击"生成提单"预览</div></div>
+</div>
+</div>
+
+<div id="toastSuccess" class="toast-tip" style="opacity:0;">导入成功</div>
+<div id="toastPdf" class="toast-tip" style="opacity:0;background-color:#3b82f6;">PDF生成成功</div>
+
+<script>
+(function(){
+    let products = [];
+
+    const dom = {
+        shipper: document.getElementById('shipper'),
+        consignee: document.getElementById('consignee'),
+        notifyParty: document.getElementById('notifyParty'),
+        blno: document.getElementById('blno'),
+        preCarriage: document.getElementById('preCarriage'),
+        receiptPlace: document.getElementById('receiptPlace'),
+        vessel: document.getElementById('vessel'),
+        pol: document.getElementById('pol'),
+        pod: document.getElementById('pod'),
+        deliveryPlace: document.getElementById('deliveryPlace'),
+        containerNo: document.getElementById('containerNo'),
+        marks: document.getElementById('marks'),
+        grossWeight: document.getElementById('grossWeight'),
+        grossWeightUnit: document.getElementById('grossWeightUnit'),
+        measurement: document.getElementById('measurement'),
+        measurementUnit: document.getElementById('measurementUnit'),
+        totalPackages: document.getElementById('totalPackages'),
+        packagesUnit: document.getElementById('packagesUnit'),
+        freightTerm: document.getElementById('freightTerm'),
+        totalPrepaidText: document.getElementById('totalPrepaidText'),
+        originalBLCount: document.getElementById('originalBLCount')
+    };
+
+    function showToast(id) { let el = document.getElementById(id); if(el) { el.style.opacity = '1'; setTimeout(() => el.style.opacity = '0', 1500); } }
+    function calcTotal(price, qty) { return (parseFloat(price||0) * parseInt(qty||0)).toFixed(2); }
+
+    function updateTotalValue() {
+        let sum = products.reduce((acc, p) => acc + parseFloat(p.total||0), 0);
+        let tv = document.getElementById('totalGoodsValue');
+        if(tv) tv.value = sum.toFixed(2);
+    }
+
+    function formatTotalWithCurrency(price, currency) {
+        let symbol = '';
+        if(currency === 'USD') symbol = '$';
+        else if(currency === 'EUR') symbol = '€';
+        else if(currency === 'GBP') symbol = '£';
+        else if(currency === 'CNY') symbol = '¥';
+        else symbol = currency + ' ';
+        return symbol + parseFloat(price).toFixed(2);
+    }
+
+    function refreshProductTotal(idx) {
+        let p = products[idx];
+        let tot = calcTotal(p.unitPrice, p.quantity);
+        p.total = tot;
+        return tot;
+    }
+
+    function renderProductTable() {
+        let tbody = document.getElementById('productTbody');
+        if(!tbody) return;
+        tbody.innerHTML = '';
+        for(let i=0; i<products.length; i++) {
+            let p = products[i];
+            let row = tbody.insertRow();
+
+            // 图片列
+            let imgCell = row.insertCell(0);
+            let imgDiv = document.createElement('div');
+            imgDiv.style.display = 'flex';
+            imgDiv.style.flexDirection = 'column';
+            imgDiv.style.alignItems = 'center';
+            let img = document.createElement('img');
+            img.className = 'img-preview-sm';
+            img.src = p.imgUrl && p.imgUrl.trim() ? p.imgUrl : 'https://placehold.co/70x70?text=Img';
+            img.style.cursor = 'pointer';
+            img.title = '点击输入图片 URL';
+            img.onclick = (function(idx) { return function() { let url = prompt('输入图片 URL', products[idx].imgUrl); if(url !== null) { products[idx].imgUrl = url; renderProductTable(); } }})(i);
+            imgDiv.appendChild(img);
+            let upBtn = document.createElement('button');
+            upBtn.textContent = '上传';
+            upBtn.className = 'btn-icon';
+            upBtn.onclick = (function(idx) { return function() {
+                let input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = function(e) {
+                    let file = e.target.files[0];
+                    if(file) {
+                        let reader = new FileReader();
+                        reader.onload = function(ev) { products[idx].imgUrl = ev.target.result; renderProductTable(); };
+                        reader.readAsDataURL(file);
+                    }
+                };
+                input.click();
+            }})(i);
+            imgDiv.appendChild(upBtn);
+            imgCell.appendChild(imgDiv);
+
+            // 产品名称
+            let nameCell = row.insertCell(1);
+            let nameInput = document.createElement('input');
+            nameInput.value = p.name;
+            nameInput.style.width = '120px';
+            nameInput.onchange = (function(idx) { return function() { products[idx].name = nameInput.value; renderPreview(); }; })(i);
+            nameCell.appendChild(nameInput);
+
+            // 单价 + 货币单位（独立选择）
+            let priceCell = row.insertCell(2);
+            let priceWrap = document.createElement('div');
+            priceWrap.style.display = 'flex';
+            priceWrap.style.gap = '4px';
+            let priceInput = document.createElement('input');
+            priceInput.type = 'number';
+            priceInput.step = '0.01';
+            priceInput.value = p.unitPrice;
+            priceInput.style.width = '80px';
+            let currencySel = document.createElement('select');
+            currencySel.style.width = '70px';
+            currencySel.innerHTML = '<option value="USD">USD ($)</option><option value="EUR">EUR (€)</option><option value="GBP">GBP (£)</option><option value="CNY">CNY (¥)</option>';
+            currencySel.value = p.currencyUnit || 'USD';
+            // 单价变化时重新计算该产品总价
+            priceInput.oninput = (function(idx, sel) { return function() {
+                products[idx].unitPrice = priceInput.value;
+                products[idx].currencyUnit = sel.value;
+                refreshProductTotal(idx);
+                renderProductTable();
+                updateTotalValue();
+                renderPreview();
+            }; })(i, currencySel);
+            // 货币单位变化时重新计算总价并刷新显示
+            currencySel.onchange = (function(idx, inp) { return function() {
+                products[idx].currencyUnit = currencySel.value;
+                refreshProductTotal(idx);
+                renderProductTable();
+                updateTotalValue();
+                renderPreview();
+            }; })(i, priceInput);
+            priceWrap.appendChild(priceInput);
+            priceWrap.appendChild(currencySel);
+            priceCell.appendChild(priceWrap);
+
+            // 数量 + 单位
+            let qtyCell = row.insertCell(3);
+            let qtyWrap = document.createElement('div');
+            qtyWrap.style.display = 'flex';
+            qtyWrap.style.gap = '4px';
+            let qtyInput = document.createElement('input');
+            qtyInput.type = 'number';
+            qtyInput.value = p.quantity;
+            qtyInput.style.width = '80px';
+            let qtyUnitSel = document.createElement('select');
+            qtyUnitSel.style.width = '70px';
+            qtyUnitSel.innerHTML = '<option value="PCS">PCS</option><option value="BOX">BOX</option><option value="PALLET">PALLET</option><option value="SET">SET</option>';
+            qtyUnitSel.value = p.qtyUnit || 'PCS';
+            qtyInput.oninput = (function(idx, sel) { return function() {
+                products[idx].quantity = qtyInput.value;
+                products[idx].qtyUnit = sel.value;
+                refreshProductTotal(idx);
+                renderProductTable();
+                updateTotalValue();
+                renderPreview();
+            }; })(i, qtyUnitSel);
+            qtyUnitSel.onchange = (function(idx) { return function() {
+                products[idx].qtyUnit = qtyUnitSel.value;
+                renderPreview();
+            }; })(i);
+            qtyWrap.appendChild(qtyInput);
+            qtyWrap.appendChild(qtyUnitSel);
+            qtyCell.appendChild(qtyWrap);
+
+            // 总价（带货币符号）
+            let totalCell = row.insertCell(4);
+            let totalValue = refreshProductTotal(i);
+            let currencySymbol = products[i].currencyUnit || 'USD';
+            totalCell.innerText = formatTotalWithCurrency(totalValue, currencySymbol);
+            totalCell.style.fontWeight = 'bold';
+
+            // 删除按钮
+            let delCell = row.insertCell(5);
+            let delBtn = document.createElement('button');
+            delBtn.innerText = '删除';
+            delBtn.className = 'btn-icon';
+            delBtn.style.background = '#fee2e2';
+            delBtn.onclick = (function(idx) { return function() { products.splice(idx,1); renderProductTable(); updateTotalValue(); renderPreview(); }; })(i);
+            delCell.appendChild(delBtn);
+        }
+        updateTotalValue();
+    }
+
+    function getFormData() {
+        return {
+            shipper: dom.shipper.value,
+            consignee: dom.consignee.value,
+            notifyParty: dom.notifyParty.value,
+            blNo: dom.blno.value,
+            preCarriage: dom.preCarriage.value,
+            receiptPlace: dom.receiptPlace.value,
+            vesselVoy: dom.vessel.value,
+            portOfLoading: dom.pol.value,
+            portOfDischarge: dom.pod.value,
+            placeOfDelivery: dom.deliveryPlace.value,
+            containerSeal: dom.containerNo.value,
+            marks: dom.marks.value,
+            grossWeight: dom.grossWeight.value + ' ' + dom.grossWeightUnit.value,
+            measurement: dom.measurement.value + ' ' + dom.measurementUnit.value,
+            totalPackages: dom.totalPackages.value + ' ' + dom.packagesUnit.value,
+            freightTerm: dom.freightTerm.value,
+            totalValueSummary: document.getElementById('totalGoodsValue').value,
+            totalPrepaidText: dom.totalPrepaidText.value,
+            originalBLCount: dom.originalBLCount.value
+        };
+    }
+
+    function renderPreview() {
+        let d = getFormData();
+        let container = document.getElementById('previewContainer');
+        if(!container) return;
+
+        let goodsHtml = '';
+        if(products.length === 0) {
+            goodsHtml = '<tr><td colspan="5" style="text-align:center">— 暂无产品 —</td></tr>';
+        } else {
+            for(let p of products) {
+                let imgTag = (p.imgUrl && p.imgUrl.trim()) ? `<img src="${escapeHtml(p.imgUrl)}" class="tiny-img" style="max-width:50px;" onerror="this.src='https://placehold.co/50x50?text=err'">` : '<span style="color:gray;">无图</span>';
+                let priceDisplay = parseFloat(p.unitPrice||0).toFixed(2) + ' ' + (p.currencyUnit||'USD');
+                let qtyDisplay = (p.quantity||0) + ' ' + (p.qtyUnit||'PCS');
+                let totalWithSymbol = formatTotalWithCurrency(p.total, p.currencyUnit||'USD');
+                goodsHtml += `<tr>
+                    <td style="text-align:center">${imgTag}</td>
+                    <td>${escapeHtml(p.name||'-')}</td>
+                    <td>${priceDisplay}</td>
+                    <td>${qtyDisplay}</td>
+                    <td>${totalWithSymbol}</td>
+                </tr>`;
+            }
+        }
+
+        let now = new Date();
+        let issueDate = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+        let issuePlace = d.portOfLoading;
+        let totalValueFormatted = parseFloat(d.totalValueSummary).toFixed(2);
+
+        let html = `
+            <div class="bl-header"><h1>BILL OF LADING</h1><p>OCEAN / COMBINED TRANSPORT — COSCO SHIPPING LINES</p><p><strong>B/L No.: ${escapeHtml(d.blNo)}</strong></p></div>
+            <div class="bl-row"><div class="bl-label">Shipper</div><div class="bl-value">${escapeHtml(d.shipper)}</div></div>
+            <div class="bl-row"><div class="bl-label">Consignee</div><div class="bl-value">${escapeHtml(d.consignee)}</div></div>
+            <div class="bl-row"><div class="bl-label">Notify Party</div><div class="bl-value">${escapeHtml(d.notifyParty)}</div></div>
+            <div class="two-columns"><div class="col"><div class="bl-row"><div class="bl-label">Pre-carriage</div><div class="bl-value">${escapeHtml(d.preCarriage||'-')}</div></div></div><div class="col"><div class="bl-row"><div class="bl-label">Place of Receipt</div><div class="bl-value">${escapeHtml(d.receiptPlace)}</div></div></div></div>
+            <div class="two-columns"><div class="col"><div class="bl-row"><div class="bl-label">Vessel / Voy</div><div class="bl-value">${escapeHtml(d.vesselVoy)}</div></div></div><div class="col"><div class="bl-row"><div class="bl-label">Port of Loading</div><div class="bl-value">${escapeHtml(d.portOfLoading)}</div></div></div></div>
+            <div class="two-columns"><div class="col"><div class="bl-row"><div class="bl-label">Port of Discharge</div><div class="bl-value">${escapeHtml(d.portOfDischarge)}</div></div></div><div class="col"><div class="bl-row"><div class="bl-label">Place of Delivery</div><div class="bl-value">${escapeHtml(d.placeOfDelivery)}</div></div></div></div>
+            <div class="bl-row"><div class="bl-label">Container / Seal No.</div><div class="bl-value">${escapeHtml(d.containerSeal)}</div></div>
+            <div class="bl-row"><div class="bl-label">Marks & Nos.</div><div class="bl-value">${escapeHtml(d.marks)}</div></div>
+            <div class="goods-section"><table class="goods-table-bl"><thead><tr><th>Image</th><th>Product Name</th><th>Unit Price</th><th>Qty</th><th>Total</th></tr></thead><tbody>${goodsHtml}</tbody></table></div>
+            <div class="weight-measure-row"><div class="weight-cell"><div class="cell-label">GROSS WEIGHT</div><div class="cell-value">${escapeHtml(d.grossWeight)}</div></div><div class="measure-cell"><div class="cell-label">MEASUREMENT</div><div class="cell-value">${escapeHtml(d.measurement)}</div></div></div>
+            <div class="package-row"><span style="font-weight:800;">Total packages:</span> ${escapeHtml(d.totalPackages)}</div>
+            <div class="freight-info-row"><div class="freight-cell-left"><div class="cell-label">FREIGHT & CHARGES</div><div class="cell-value">${escapeHtml(d.freightTerm)}</div></div><div class="freight-cell-right"><div class="cell-label">TOTAL VALUE</div><div class="cell-value">${totalValueFormatted}</div></div></div>
+            <div class="issuance-cell"><div class="issuance-left"><div class="cell-label">PREPAID AT</div><div class="cell-value">${escapeHtml(d.portOfLoading)}</div><div style="margin-top:10px;"><div class="cell-label">PAYABLE AT</div><div class="cell-value">${escapeHtml(d.portOfDischarge)}</div></div><div style="margin-top:10px;"><div class="cell-label">ISSUE DATE</div><div class="cell-value">${escapeHtml(issuePlace)}, ${issueDate}</div></div></div><div class="issuance-right"><div class="cell-label">TOTAL PREPAID</div><div class="cell-value">${escapeHtml(d.totalPrepaidText)}</div><div style="margin-top:12px;"><div class="cell-label">ORIGINAL B/L</div><div class="cell-value">${escapeHtml(d.originalBLCount)}</div></div></div></div>
+        `;
+        container.innerHTML = html;
+    }
+
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+
+    function downloadTemplate() {
+        let shipData = [["Field","Value"],
+            ["Shipper","NINGBO JIANGDONG IMP & EXP CO.,LTD."],
+            ["Consignee","TO THE ORDER OF SHIPPER"],
+            ["Notify Party","SAME AS CONSIGNEE"],
+            ["B/L No.","COSU6688991122"],
+            ["Pre-carriage by",""],
+            ["Place of Receipt","NINGBO, CHINA"],
+            ["Ocean Vessel / Voy No.","CMA CGM ALHAMBRA / 0FM6HW"],
+            ["Port of Loading","NINGBO, CHINA"],
+            ["Port of Discharge","HAMBURG, GERMANY"],
+            ["Place of Delivery","HAMBURG, GERMANY"],
+            ["Container / Seal No.","MSCU9876543 / 112233"],
+            ["Marks & Nos.",""],
+            ["Gross Weight (kg)","1250.00 KGS"],
+            ["Measurement (CBM)","3.45 CBM"],
+            ["Total packages","22 PALLETS"],
+            ["Freight Term","PREPAID"],
+            ["Total Prepaid Text","AS ARRANGED"],
+            ["No. of Original B/L","3 (THREE)"]];
+        let prodData = [["Product Name","Unit Price (USD)","Quantity"],
+            ["LED Television 55\"",320,50],
+            ["Bluetooth Speaker",24.5,200]];
+        let wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(shipData), "Shipping");
+        XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(prodData), "Products");
+        XLSX.writeFile(wb, "Bill_of_Lading_Template.xlsx");
+    }
+
+    function importFile(file) {
+        let ext = file.name.split('.').pop().toLowerCase();
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            let data = e.target.result;
+            let wb;
+            try {
+                if(ext === 'xlsx' || ext === 'xls') wb = XLSX.read(new Uint8Array(data), {type:'array'});
+                else if(ext === 'csv' || ext === 'txt') wb = XLSX.read(data, {type:'string', raw:true});
+                else { showToast('toastSuccess'); return; }
+                let shipSheet = wb.Sheets['Shipping'];
+                let prodSheet = wb.Sheets['Products'];
+                if(!shipSheet || !prodSheet) { showToast('toastSuccess'); return; }
+                let shipData = XLSX.utils.sheet_to_json(shipSheet, {header:1, defval:""});
+                for(let i=1; i<shipData.length; i++) {
+                    let row = shipData[i];
+                    if(row && row.length>=2) {
+                        let field = (row[0]||'').toString().trim();
+                        let val = (row[1]||'').toString();
+                        switch(field) {
+                            case 'Shipper': dom.shipper.value = val; break;
+                            case 'Consignee': dom.consignee.value = val; break;
+                            case 'Notify Party': dom.notifyParty.value = val; break;
+                            case 'B/L No.': dom.blno.value = val; break;
+                            case 'Pre-carriage by': dom.preCarriage.value = val; break;
+                            case 'Place of Receipt': dom.receiptPlace.value = val; break;
+                            case 'Ocean Vessel / Voy No.': dom.vessel.value = val; break;
+                            case 'Port of Loading': dom.pol.value = val; break;
+                            case 'Port of Discharge': dom.pod.value = val; break;
+                            case 'Place of Delivery': dom.deliveryPlace.value = val; break;
+                            case 'Container / Seal No.': dom.containerNo.value = val; break;
+                            case 'Marks & Nos.': dom.marks.value = val; break;
+                            case 'Gross Weight (kg)': dom.grossWeight.value = val.replace(/[^0-9.-]/g,''); break;
+                            case 'Measurement (CBM)': dom.measurement.value = val.replace(/[^0-9.-]/g,''); break;
+                            case 'Total packages': dom.totalPackages.value = val.replace(/[^0-9]/g,''); break;
+                            case 'Freight Term': if(val.toUpperCase()==='PREPAID'||val.toUpperCase()==='COLLECT') dom.freightTerm.value = val.toUpperCase(); break;
+                            case 'Total Prepaid Text': dom.totalPrepaidText.value = val; break;
+                            case 'No. of Original B/L': dom.originalBLCount.value = val; break;
+                        }
+                    }
+                }
+                let prodRaw = XLSX.utils.sheet_to_json(prodSheet, {header:1, defval:""});
+                let newProds = [];
+                for(let i=1; i<prodRaw.length; i++) {
+                    let row = prodRaw[i];
+                    if(row && row.length>=3 && row[0] && row[0].toString().trim()) {
+                        let name = row[0].toString().trim();
+                        let price = parseFloat(row[1]);
+                        let qty = parseInt(row[2]);
+                        if(isNaN(price)) price = 0;
+                        if(isNaN(qty)) qty = 1;
+                        let total = (price * qty).toFixed(2);
+                        newProds.push({imgUrl:'', name:name, unitPrice:price, quantity:qty, total:total, currencyUnit:'USD', qtyUnit:'PCS'});
+                    }
+                }
+                if(newProds.length > 0) products = newProds;
+                renderProductTable();
+                updateTotalValue();
+                renderPreview();
+                showToast('toastSuccess');
+            } catch(err) { console.error(err); showToast('toastSuccess'); }
+        };
+        if(ext === 'xlsx' || ext === 'xls') reader.readAsArrayBuffer(file);
+        else reader.readAsBinaryString(file);
+    }
+
+    document.getElementById('downloadBtn').addEventListener('click', downloadTemplate);
+    document.getElementById('importBtn').addEventListener('click', () => document.getElementById('fileInput').click());
+    document.getElementById('fileInput').addEventListener('change', (e) => { if(e.target.files.length) { importFile(e.target.files[0]); e.target.value = ''; } });
+    document.getElementById('addProductBtn').addEventListener('click', () => {
+        products.push({imgUrl:'', name:'新产品', unitPrice:'0', quantity:'1', total:'0.00', currencyUnit:'USD', qtyUnit:'PCS'});
+        renderProductTable();
+        renderPreview();
+    });
+    document.getElementById('generateBtn').addEventListener('click', renderPreview);
+    document.getElementById('printBtn').addEventListener('click', () => { renderPreview(); setTimeout(() => window.print(), 100); });
+    document.getElementById('pdfBtn').addEventListener('click', async function() {
+        let el = document.getElementById('previewContainer');
+        if(!el) return;
+        let btn = this;
+        try {
+            btn.disabled = true;
+            btn.textContent = '⏳ 生成中...';
+            let old = el.style.overflow;
+            el.style.overflow = 'visible';
+            let canvas = await html2canvas(el, {scale:2, backgroundColor:'#ffffff', logging:false, useCORS:true});
+            el.style.overflow = old;
+            let imgData = canvas.toDataURL('image/png');
+            let { jsPDF } = window.jspdf;
+            let pdf = new jsPDF('p', 'mm', 'a4');
+            let w = 210;
+            let h = (canvas.height * w) / canvas.width;
+            pdf.addImage(imgData, 'PNG', 0, 0, w, h);
+            pdf.save('Bill_of_Loading.pdf');
+            showToast('toastPdf');
+        } catch(err) { console.error(err); showToast('toastSuccess'); }
+        finally { btn.disabled = false; btn.textContent = '📑 保存为 PDF'; }
+    });
+
+    products = [
+        {imgUrl:'https://placehold.co/60x60?text=TV', name:'LED TV 55"', unitPrice:'320', quantity:'50', total:'16000.00', currencyUnit:'USD', qtyUnit:'PCS'},
+        {imgUrl:'https://placehold.co/60x60?text=Speaker', name:'Bluetooth Speaker', unitPrice:'24.5', quantity:'200', total:'4900.00', currencyUnit:'USD', qtyUnit:'PCS'}
+    ];
+    renderProductTable();
+    updateTotalValue();
+    renderPreview();
+})();
+</script>
+</body>
+</html>
