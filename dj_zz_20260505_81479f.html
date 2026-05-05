@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>外贸单据查询 | 全板块点击查看详情 + 表格模板</title>
+    <!-- Google Fonts + 高级感字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f4f9fe 0%, #eef2f8 100%);
+            font-family: 'Inter', sans-serif;
+            color: #132a3c;
+            padding: 2rem 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 2.2rem;
+        }
+        .header-section h1 {
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: -0.3px;
+            background: linear-gradient(120deg, #1f577b, #0e3a54);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .header-section h1 i {
+            background: none;
+            -webkit-background-clip: unset;
+            color: #2c6e96;
+        }
+        .header-section .subhead {
+            color: #637f99;
+            font-weight: 400;
+            font-size: 0.9rem;
+            margin-top: 8px;
+            border-top: 1px solid #d4e2ef;
+            display: inline-block;
+            padding-top: 10px;
+        }
+
+        .glass-card {
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+
+        .inquiry-bar {
+            padding: 1.3rem 2rem 1.5rem 2rem;
+            margin-bottom: 2rem;
+            background: #ffffffdd;
+            backdrop-filter: blur(2px);
+            border-radius: 48px;
+            box-shadow: 0 12px 24px -14px rgba(0, 0, 0, 0.06);
+        }
+        .select-title {
+            font-size: 1.45rem !important;
+            font-weight: 700;
+            color: #1c5477;
+            margin-bottom: 0.7rem;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .select-title i {
+            font-size: 1.5rem;
+            color: #2a719b;
+        }
+        .select-wrapper {
+            width: 100%;
+        }
+        .custom-select {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            background-color: #ffffff;
+            border: 1.5px solid #e2edf6;
+            border-radius: 44px;
+            font-family: 'Inter', monospace;
+            cursor: pointer;
+            color: #1c405b;
+            transition: all 0.2s;
+            outline: none;
+            margin-top: 0.25rem;
+        }
+        .custom-select:focus {
+            border-color: #4488b3;
+            box-shadow: 0 0 0 3px rgba(68, 136, 179, 0.12);
+        }
+        .btn-query {
+            background: #1c5a7c;
+            border: none;
+            padding: 0.85rem 2.2rem;
+            border-radius: 48px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 8px 18px -10px rgba(28, 90, 124, 0.35);
+            font-family: 'Inter', sans-serif;
+            margin-top: 0.6rem;
+            width: auto;
+        }
+        .btn-query i {
+            font-size: 1rem;
+        }
+        .btn-query:hover {
+            background: #0f4664;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 28px -12px #1c5a7c70;
+        }
+        .flex-btn {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .result-area {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+        .info-card, .steps-card, .notice-card {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 1.6rem 1.8rem;
+            transition: all 0.2s;
+            border: 1px solid #ecf3f9;
+            box-shadow: 0 5px 12px -6px rgba(0, 0, 0, 0.02);
+        }
+        .info-card:hover, .steps-card:hover, .notice-card:hover {
+            border-color: #d4e2ef;
+            transform: translateY(-3px);
+            box-shadow: 0 20px 28px -16px rgba(0, 0, 0, 0.08);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.35rem;
+            border-bottom: 2px solid #eef4fa;
+            padding-bottom: 0.8rem;
+        }
+        .card-header i {
+            font-size: 1.8rem;
+            color: #2a719b;
+        }
+        .card-header h2 {
+            font-weight: 650;
+            font-size: 1.45rem;
+            color: #1c4a6b;
+            letter-spacing: -0.2px;
+        }
+        /* 核心要素列表 - 可点击查看详情 */
+        .elements-list {
+            list-style: none;
+            padding: 0;
+        }
+        .elements-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+            color: #2a4d6e;
+            background: #fafdff;
+            padding: 0.7rem 0.9rem;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .elements-list li:hover {
+            background: #eef4fc;
+            border-color: #caddf0;
+            transform: translateX(4px);
+        }
+        .elements-list li i:first-child {
+            color: #2a719b;
+            font-size: 0.9rem;
+            width: 22px;
+        }
+        .elements-list li span {
+            flex: 1;
+        }
+        .detail-badge {
+            font-size: 0.7rem;
+            background: #e2ecf5;
+            padding: 3px 10px;
+            border-radius: 30px;
+            color: #1f577b;
+            margin-left: 8px;
+            white-space: nowrap;
+        }
+        .sub-detail {
+            font-size: 0.78rem;
+            color: #5f7f9a;
+            display: block;
+            margin-top: 6px;
+            line-height: 1.4;
+            padding-left: 10px;
+            border-left: 2px solid #bdd9ef;
+        }
+        .detail-expand {
+            margin-top: 0.5rem;
+            padding: 0.8rem 1rem;
+            background: #f6fafd;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            color: #1f5a7e;
+            border-left: 3px solid #2a719b;
+            animation: fadeSlide 0.2s ease-out;
+        }
+        /* 实操步骤列表 - 每一条都可点击展开详情 */
+        .steps-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .steps-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 1rem;
+            background: #f8fbfe;
+            padding: 0.8rem 1rem;
+            border-radius: 20px;
+            border-left: 4px solid #2a719b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .steps-list li:hover {
+            background: #eef3fc;
+            transform: translateX(5px);
+        }
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #2a719b;
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            width: 26px;
+            height: 26px;
+            border-radius: 30px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-text {
+            flex: 1;
+            font-weight: 500;
+            color: #1f4f71;
+            line-height: 1.45;
+        }
+        .step-note {
+            font-size: 0.75rem;
+            color: #5f7f9a;
+            margin-top: 6px;
+            font-weight: 400;
+        }
+        .step-detail-expand {
+            margin-top: 0.8rem;
+            padding: 0.7rem 1rem;
+            background: #eef4fa;
+            border-radius: 14px;
+            font-size: 0.8rem;
+            color: #1f5a7e;
+            border-left: 3px solid #2a719b;
+            display: none;
+        }
+        /* 注意事项 - 整体可点击 */
+        .notice-content {
+            background: #fff7eb;
+            border-left: 5px solid #e6a017;
+            padding: 1rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: #7a5c2c;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .notice-content:hover {
+            background: #fff2e0;
+            transform: scale(1.01);
+        }
+        .notice-expand {
+            margin-top: 0.8rem;
+            padding: 0.8rem 1rem;
+            background: #fff8ef;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            color: #9b6f2c;
+            border-top: 1px dashed #e6c8a0;
+            display: none;
+        }
+        .template-showcase {
+            margin-top: 0rem;
+        }
+        .template-card-inner {
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 1.6rem 2rem;
+            border: 1px solid #ecf3fa;
+        }
+        .template-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 1.4rem;
+            border-bottom: 2px solid #eef4fa;
+            padding-bottom: 0.9rem;
+        }
+        .template-header i {
+            font-size: 1.7rem;
+            color: #2a719b;
+        }
+        .template-header span {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #1b4d6e;
+        }
+        .badge-view {
+            margin-left: auto;
+            background: #eef2f8;
+            padding: 5px 16px;
+            border-radius: 60px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #3f6f92;
+        }
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            background: #fefefe;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+        .doc-table th, .doc-table td {
+            border: 1px solid #d0dee9;
+            padding: 12px 14px;
+            vertical-align: top;
+            text-align: left;
+            font-family: 'Inter', monospace;
+        }
+        .doc-table th {
+            background: #f5fafe;
+            font-weight: 600;
+            color: #1f577b;
+            width: 28%;
+        }
+        .doc-table td {
+            color: #1f4562;
+            background-color: #ffffff;
+        }
+        .table-caption {
+            margin-top: 12px;
+            font-size: 0.7rem;
+            text-align: right;
+            color: #7a99b3;
+            border-top: 1px dashed #d4e2ef;
+            padding-top: 10px;
+        }
+        .empty-modern {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: rgba(255,255,255,0.75);
+            border-radius: 48px;
+            color: #6e93b0;
+        }
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #89abc5;
+            border-top: 1px solid #d9e6f2;
+            padding-top: 1.8rem;
+        }
+        @media (max-width: 880px) {
+            body { padding: 1rem; }
+            .flex-btn { justify-content: stretch; }
+            .btn-query { width: 100%; justify-content: center; }
+            .doc-table th, .doc-table td { padding: 8px 10px; }
+        }
+        .fade-enter {
+            animation: fadeSlide 0.35s ease-out;
+        }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header-section">
+        <h1><i class="fas fa-file-invoice"></i> 外贸单据查询</h1>
+        <div class="subhead">核心要素 · 实操步骤 · 注意事项 均支持【点击查看详情】| 表格化模板</div>
+    </div>
+
+    <div class="inquiry-bar glass-card">
+        <div class="select-title">
+            <i class="fas fa-receipt"></i> 选择外贸单据类型
+        </div>
+        <div class="select-wrapper">
+            <select id="docTypeSelect" class="custom-select">
+                <option value="PI">📄 Proforma Invoice (PI) 形式发票</option>
+                <option value="CI">📑 Commercial Invoice (CI) 商业发票</option>
+                <option value="PO">📋 Purchase Order (PO) 采购订单</option>
+                <option value="PL">📦 Packing List (PL) 装箱单</option>
+                <option value="BL">⚓ Bill of Lading (B/L) 海运提单</option>
+                <option value="CO">🌍 Certificate of Origin (C/O) 原产地证</option>
+                <option value="INS">🛡️ Insurance Certificate 保险凭证</option>
+                <option value="LC">💳 Letter of Credit (L/C) 信用证</option>
+                <option value="SII">✈️ Shipping Instruction 装运指示</option>
+                <option value="AWB">📄 Air Waybill (AWB) 航空运单</option>
+                <option value="DN">📉 Debit Note 借记通知单</option>
+                <option value="CN">💰 Credit Note 贷记通知单</option>
+                <option value="EXF">📁 Export Declaration 出口报关单</option>
+            </select>
+        </div>
+        <div class="flex-btn">
+            <button id="queryBtn" class="btn-query"><i class="fas fa-search"></i> 查询单据 · 生成详情</button>
+        </div>
+    </div>
+
+    <div class="result-area" id="resultArea">
+        <div class="empty-modern">
+            <i class="fas fa-mouse-pointer" style="font-size: 2.6rem; opacity: 0.6; margin-bottom: 1rem; display: inline-block;"></i>
+            <p>选择单据类型，点击查询。任意【核心要素】、【实操步骤】、【注意事项】均可点击展开详细说明</p>
+        </div>
+    </div>
+    <footer><i class="fas fa-hand-pointer"></i> 提示：点击带📘图标的条目或步骤条，可查看详细解释 | 模板以表格单元格呈现</footer>
+</div>
+
+<script>
+    // ============================================================
+    // 外贸单据完整数据 - 所有单据均包含完整字段 
+    // 额外为每个步骤增加了 stepDetail 字段，用于点击展开详细说明
+    // ============================================================
+    const TRADE_DOCS = {
+        PI: { 
+            name: "形式发票 (Proforma Invoice)", 
+            info: [
+                { main: "卖方与买方完整信息（公司名、地址、联系人）", sub: "必须与后续商业发票一致，避免清关退单", detail: "清关时海关会比对商业发票和PI中的买卖双方信息，任何不一致（如公司名拼写错误、地址不完整）都可能导致退单或查验。建议使用官方注册名称，并包含VAT/Tax ID。" },
+                { main: "形式发票编号与签发日期", sub: "建议格式: PI-年份-序列号，保持唯一性", detail: "唯一的PI编号有助于交易追踪和后续订单关联。日期应使用标准格式（YYYY-MM-DD），避免因日期模糊引发有效期争议。" },
+                { main: "产品详细描述与HS编码", sub: "HS编码预估6-10位，需匹配实际商品归类", detail: "HS编码前6位为国际通用，后4位根据目的国要求。错误归类可能导致关税差异或被海关扣留。建议通过官方海关编码查询系统确认。" },
+                { main: "数量、单价、总金额、贸易术语", sub: "FOB/CIF/EXW必须清晰注明，币种大小写双重确认", detail: "贸易术语决定了责任划分和风险转移点（如FOB Shanghai买方负责主运费）。必须注明具体港口或地点，币种建议同时标注小写数字和大写英文防止篡改。" },
+                { main: "预计交货时间与包装方式", sub: "大致描述包装件数、毛重，帮助客户估算物流", detail: "包装信息影响运费核算，如纸箱/托盘/木箱等。建议注明外箱尺寸、毛重，便于买方提前安排内陆运输和仓储。" },
+                { main: "付款条款与银行账户", sub: "SWIFT代码、账号、预付款比例并标明收款行", detail: "预付款比例需明确（如30% deposit），尾款支付方式（见提单副本/LC at sight）。银行账户信息必须完整，错误会导致收款延误。" },
+                { main: "有效期及双方签字栏", sub: "过期未确认则PI失效，避免价格波动纠纷", detail: "PI有效期通常为3-6个月，过期后价格和条款需重新协商。买卖双方签字栏位使PI具备要约效力，建议电子签名或回传扫描件。" }
+            ],
+            steps: [
+                { title: "获取客户询盘与产品信息", desc: "确认产品规格、单价、贸易术语并核对客户公司全称及地址。", stepDetail: "在制作PI前，务必通过邮件或聊天记录与客户确认所有细节。尤其是贸易术语（FOB/CIF/EXW）和HS编码，可避免后续改单导致的费用和时间损失。" },
+                { title: "创建PI模板并填写基本信息", desc: "填入发票号、日期、买卖双方完整信息。", stepDetail: "发票号建议按照“PI-客户缩写-年月-序列号”规则编制，方便归档和检索。买方信息必须与未来商业发票完全一致，否则可能影响清关。" },
+                { title: "列出产品明细", desc: "详细描述产品型号、数量、单价、总金额及币种，并注明HS编码。", stepDetail: "产品描述尽可能详细，包括材质、型号、规格等。HS编码请使用目的国认可的版本（如中国出口使用中国海关编码，但需确认进口国是否接受）。" },
+                { title: "注明付款条款与有效期", desc: "例如30% T/T预付款，70%见提单副本；同时标注PI有效期。", stepDetail: "付款条款建议精确到天数（如：30% deposit within 3 days after PI confirmation）。有效期一般设为3-6个月，过期后价格和条款需重新协商。" },
+                { title: "核对后发送客户确认", desc: "将PI以PDF形式发给买家，等待对方回签或确认。", stepDetail: "建议要求客户在PI上加盖公章或授权签字后回传。电子回签也有效，但需保留完整沟通记录。确认后的PI可作为合同履约依据。" }
+            ],
+            notice: "① 形式发票不是最终结算凭证，但法律效力需重视；② 务必确保产品描述精准；③ 预付款账户必须与PI一致；④ 有效期不宜过长。",
+            noticeDetail: "【详细说明】形式发票虽非正式结算文件，但在贸易中作为报价要约和开证依据，具有法律约束力。产品描述务必与最终商业发票完全一致，否则客户可能拒付。预付款账户必须与PI中的银行信息严格匹配，避免钓鱼欺诈。",
+            tableRows: [
+                { label: "单据类型", value: "PROFORMA INVOICE (形式发票)" }, { label: "发票号码", value: "PI-XXX-001" }, { label: "发票日期", value: "20XX-XX-XX" }, { label: "卖方", value: "XXX Company Ltd." },{ label: "买方", value: "XXX Imports" },{ label: "产品描述 & HS编码", value: "XXX产品 / HS: XXXX.XX" },{ label: "数量 & 单价", value: "XXX 套 × USD XX.XX" },{ label: "总金额", value: "USD XXX.XX" },{ label: "贸易术语", value: "FOB XXX PORT" },{ label: "付款条款", value: "30% T/T 预付款" }
+            ]
+        },
+        CI: { 
+            name: "商业发票 (Commercial Invoice)", 
+            info: [
+                { main: "卖方与买方税务信息 (TAX ID/EORI)", sub: "欧盟国家需要EORI号", detail: "税务信息不准确会导致买方无法抵扣进口增值税。EORI号是欧盟海关唯一识别码。" },
+                { main: "商业发票号及日期", sub: "建议关联PI号", detail: "关联PI号可快速匹配订单，日期不可晚于提单日期。" },
+                { main: "货物明细 HS编码、品名、数量、单价", sub: "HS编码精确至6-10位", detail: "错误编码可能被海关重新归类并加征罚金。" },
+                { main: "贸易术语及运费细分", sub: "FOB/CIF需明确", detail: "CIF条款下需单独列明运费和保险费。" },
+                { main: "原产国声明", sub: "必须与产地证一致", detail: "原产国标识错误可能导致反倾销税。" },
+                { main: "总金额大小写及币种", sub: "防止篡改", detail: "同时使用数字和英文大写，避免金额争议。" },
+                { main: "证明声明及授权签字", sub: "We certify...", detail: "虚假声明可能导致法律责任。" }
+            ],
+            steps: [
+                { title: "依据实际发货数据转换", desc: "根据实际数量、单价，参考PI转化为商业发票。", stepDetail: "发货数量可能与PI有差异（如溢短装），商业发票必须以实际出运数量为准，并注明原因。" },
+                { title: "填写准确的HS编码及原产国", desc: "HS编码精确到6-10位，原产国清晰标注。", stepDetail: "如果产品涉及多个组件，需按照归类总规则确定唯一HS编码。原产国标注“MADE IN XXX”必须显著。" },
+                { title: "确认最终金额与贸易术语", desc: "FOB/CIF条款下分别显示运费/保险金额。", stepDetail: "金额与报关单申报金额必须完全一致。CIF条款下，运费和保险费需单独列明，便于买方核算成本。" },
+                { title: "核对与装箱单一致性", desc: "确保总毛件体积与PL/BL完全一致。", stepDetail: "商业发票的总件数和毛重必须与装箱单、提单匹配，否则海关可能查验扣货。" },
+                { title: "盖章签字并随附文件", desc: "正本商业发票需盖章/签字。", stepDetail: "电子发票建议加密发送，并保留已签章版本。对于信用证结算，发票需按信用证要求显示特殊条款。" }
+            ],
+            notice: "① 发票金额必须与报关单一致；② 如涉及信用证，内容需与L/C完全匹配；③ 原产国标记显著。",
+            noticeDetail: "【详细说明】报关金额与发票不一致会触发海关查验。信用证结算时，发票上的任何描述都必须与信用证措辞完全一致，哪怕一个空格差异都可能构成不符点。原产国标记建议使用“MADE IN [COUNTRY]”并放置于显著位置。",
+            tableRows: [ { label:"单据名称", value:"COMMERCIAL INVOICE"},{ label:"发票号/日期", value:"CI-XXX-556 / 20XX-XX-XX"},{ label:"卖方", value:"XXX Trading Co., Ltd."},{ label:"买方", value:"XXX GmbH"},{ label:"HS编码 & 品名", value:"XXXX.XX - XXX产品"},{ label:"数量/单价", value:"XXX pcs × USD XX.XX"},{ label:"总金额", value:"USD XXX.XX"},{ label:"贸易术语", value:"CIF XXX PORT"},{ label:"原产国", value:"XXX"} ]
+        },
+        // 其他单据完整数据 (为确保步骤有点击详情，均添加 stepDetail)
+        PO: { name: "采购订单 (Purchase Order)", info: [{ main:"PO编号日期", sub:"内部追踪", detail:"唯一编号有助于供应链系统对接"},{ main:"买卖双方地址", sub:"含联系人", detail:"明确责任人和紧急联系方式"},{ main:"产品规格价格", sub:"附加参数", detail:"包含型号、材质、公差等"}], steps: [{ title:"内部确认采购需求", desc:"确认SKU、数量、单价及交期", stepDetail:"使用ERP或表格明确每个SKU的订货量，避免漏订或超订"},{ title:"创建PO并填制信息", desc:"填写编号、日期、供应商信息", stepDetail:"PO编号建议按年月+流水号，便于追溯"},{ title:"列出产品规格与价格", desc:"包含编码、描述、单价", stepDetail:"注意单价币种和含税/不含税标识"},{ title:"注明付款条件", desc:"Net 30天或预付款", stepDetail:"明确账期的起算日，如“收到发票后30天”"},{ title:"发送供应商回签", desc:"双方确认生效", stepDetail:"回签扫描件或电子签章具备同等法律效力"}], notice:"① PO须经供应商书面确认；② 注明拒收标准", noticeDetail:"书面确认才具合同效力，拒收标准需明确如AQL 1.5", tableRows:[{ label:"采购订单号", value:"PO-XXX-015"},{ label:"买方", value:"XXX LLC"},{ label:"卖方", value:"XXX Factory"},{ label:"产品", value:"XXX产品"},{ label:"单价/总价", value:"USD XX.XX"},{ label:"交货日期", value:"20XX-XX-XX"}] },
+        PL: { name: "装箱单 (Packing List)", info: [{ main:"箱号/唛头", sub:"与外箱一致", detail:"唛头需完全匹配外箱印刷"},{ main:"净/毛/体积", sub:"精确小数点两位", detail:"影响舱位配载"}], steps: [{ title:"完成包装后统计数据", desc:"记录毛重净重尺寸", stepDetail:"建议逐箱称重并记录，避免总重误差超过5%"},{ title:"制作装箱单列表", desc:"按箱号顺序填入", stepDetail:"箱号连续不可跳号，便于海关查验"},{ title:"汇总总件数总毛净重", desc:"与提单保持一致", stepDetail:"总件数、毛重必须与提单数字完全一致"}], notice:"箱号不能跳号；体积精确", noticeDetail:"跳号可能被海关怀疑货物缺失，体积错误导致集装箱装不下", tableRows:[{ label:"单据号", value:"PL-XXX-21"},{ label:"箱号范围", value:"1-XXX"},{ label:"货物", value:"XXX产品"},{ label:"总体积", value:"X.X CBM"}] },
+        BL: { name: "海运提单 (Bill of Lading)", info: [{ main:"托运人Shipper", sub:"出口商", detail:"通常为出口方"},{ main:"收货人Consignee", sub:"TO ORDER", detail:"指示提单便于转让"}], steps: [{ title:"订舱获取提单草稿", desc:"核对船名航次港口", stepDetail:"确认船名、航次与订舱确认一致，避免错船"},{ title:"核对发货人收货人", desc:"TO ORDER或具体客户", stepDetail:"指示提单(TO ORDER)便于转让，记名提单不可转让"},{ title:"比对货物描述件毛体", desc:"与PL一致", stepDetail:"任何描述不符都可能导致目的港清关失败"}], notice:"正本提单是物权凭证，须妥善保管", noticeDetail:"正本提单遗失需向船公司申请保函和重新提货，流程复杂且成本高。", tableRows:[{ label:"提单号", value:"BL-XXX-001"},{ label:"船名/航次", value:"XXX / XXXW"},{ label:"货物描述", value:"XXX产品"}] },
+        CO: { name: "原产地证书 (C/O)", info: [{ main:"出口商/收货人信息", sub:"与提单一致", detail:"不一致可能导致关税优惠失效"}], steps: [{ title:"确认原产地规则", desc:"完全获得或实质性改变", stepDetail:"了解产品是否符合区域价值成分或税则归类改变标准"},{ title:"系统申请", desc:"填写出口商、收货人", stepDetail:"在贸促会或海关单一窗口提交申请，通常需1-2个工作日"}], notice:"出运前申请以免产生后发证", noticeDetail:"后发证需额外提供情况说明，且部分国家不接受后发证书。", tableRows:[{ label:"证书编号", value:"CO-XXX-876"},{ label:"产品描述", value:"XXX产品"}] },
+        INS: { name: "保险凭证", info: [{ main:"保险金额", sub:"110%发票金额", detail:"国际惯例，覆盖货值加预期利润"}], steps: [{ title:"计算投保金额", desc:"发票金额110%", stepDetail:"如有信用证，按信用证要求比例"},{ title:"提供船名航次", desc:"向保险公司投保", stepDetail:"开航前完成投保，确保保险生效日不晚于开船日"}], notice:"保险日期不得晚于装船日", noticeDetail:"保险生效日期若晚于装船日，船东事故将不在理赔范围。", tableRows:[{ label:"保单号", value:"XXX-XXX-988"},{ label:"保险金额", value:"USD XXX.XX"}] },
+        LC: { name: "信用证 (L/C)", info: [{ main:"开证行/申请人/受益人", sub:"准确核对", detail:"名称需与合同完全一致"}], steps: [{ title:"审核信用证", desc:"检查软条款/有效期", stepDetail:"特别注意是否有“软条款”如短期内无法完成的单据要求"},{ title:"要求改证", desc:"如有不符点", stepDetail:"通过通知行向开证行申请修改，避免交单时被拒付"}], notice:"任何不符点都可能遭拒付", noticeDetail:"不符点包括拼写错误、单据名称差异、交单超期等，将导致银行拒付货款。", tableRows:[{ label:"L/C号码", value:"LC-XXX-5678"},{ label:"金额", value:"USD XXX.XX"}] },
+        SII: { name: "装运指示", info: [{ main:"发货人/收货人", sub:"完整地址", detail:"用于订舱和提单"}], steps: [{ title:"联系货代截单时间", desc:"获取订舱确认", stepDetail:"通常在开船前5-7天提交S/I"},{ title:"提供毛件体数据", desc:"特殊装卸要求", stepDetail:"危险品需额外提供MSDS和危包证"}], notice:"尽早发出S/I以避免晚截单", noticeDetail:"截单时间通常为开船前3-5天，晚于截单时间需支付改单费。", tableRows:[{ label:"参考号", value:"SI-XXX-88"},{ label:"货物", value:"XXX产品"}] },
+        AWB: { name: "航空运单", info: [{ main:"计费重量", sub:"体积重与实际重取大值", detail:"取大值，避免少报"}], steps: [{ title:"向空运代理订舱", desc:"提供尺寸重量", stepDetail:"提供准确的包装尺寸，用于计算体积重量"},{ title:"核对运单数据", desc:"发货人/收货人/计费重", stepDetail:"核对收货人联系方式，目的地机场代码无误"}], notice:"航空运单非物权凭证，但需核对数据", noticeDetail:"空运速度快但无法像提单一样控货，建议针对高价值货物做保函。", tableRows:[{ label:"AWB编号", value:"XXX-XXXXX"},{ label:"件数/毛重", value:"XX箱 / XXX KG"}] },
+        DN: { name: "借记通知单", info: [{ main:"原始发票号", sub:"关联交易", detail:"便于对账"}], steps: [{ title:"确认额外费用明细", desc:"运费差/银行费", stepDetail:"附上原始发票和费用凭证"},{ title:"发送买方催款", desc:"注明期限", stepDetail:"建议在邮件中明确逾期利息条款"}], notice:"需附支持文件如发票/水单", noticeDetail:"附上原始发票和水单可减少客户争议，加快付款。", tableRows:[{ label:"借记单号", value:"DN-XXX-045"},{ label:"应付总额", value:"USD XXX.XX"}] },
+        CN: { name: "贷记通知单", info: [{ main:"原发票关联号", sub:"备注原交易", detail:"不可遗漏"}], steps: [{ title:"确认折扣/退货金额", desc:"编制贷项单", stepDetail:"注明原发票号和折扣比例"},{ title:"发送买方冲减应收", desc:"财务入账", stepDetail:"双方财务需同步核销"}], notice:"贷项单开出后需双方账务核销", noticeDetail:"买方收到贷项单后应调减应付账款，避免重复支付。", tableRows:[{ label:"贷项单号", value:"CN-XXX-078"},{ label:"贷项金额", value:"USD XXX.XX"}] },
+        EXF: { name: "出口报关单", info: [{ main:"境内发货人", sub:"进出口权企业", detail:"需有海关备案"}], steps: [{ title:"单一窗口申报", desc:"填报商品编码成交方式", stepDetail:"申报要素如品牌、型号、材质必须完整"},{ title:"上传随附单据", desc:"合同发票箱单", stepDetail:"电子扫描件清晰可读"}], notice:"申报要素必须完整", noticeDetail:"缺项将导致报关单退单，影响船期。品牌、材质、用途等要素需逐一如实申报。", tableRows:[{ label:"海关编号", value:"E-XXX-XXXXX"},{ label:"商品描述", value:"XXX产品"}] }
+    };
+
+    const docSelect = document.getElementById('docTypeSelect');
+    const queryBtn = document.getElementById('queryBtn');
+    const resultArea = document.getElementById('resultArea');
+
+    function safeStr(str) { if(!str) return ''; return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+    
+    function buildTableFromRows(rows) {
+        if(!rows || rows.length===0) return '<p>暂无表格模板数据</p>';
+        let html = `<table class="doc-table">`;
+        rows.forEach(row => { html += `<tr><th>${safeStr(row.label)}</th><td>${safeStr(row.value)}<\/td>`; });
+        html += `<\/table><div class="table-caption"><i class="fas fa-table-cells-large"></i> 单元格展示 · 敏感信息已脱敏</div>`;
+        return html;
+    }
+
+    function attachDetailListeners() {
+        // 1. 核心要素点击展开
+        document.querySelectorAll('.expandable-item').forEach(el => {
+            const detailDiv = el.querySelector('.detail-expand');
+            if(detailDiv) detailDiv.style.display = 'none';
+            el.removeEventListener('click', (e) => {});
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const detail = el.querySelector('.detail-expand');
+                if(detail) detail.style.display = detail.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+        // 2. 实操步骤点击展开 stepDetail
+        document.querySelectorAll('.step-item').forEach(el => {
+            const stepDetailDiv = el.querySelector('.step-detail-expand');
+            if(stepDetailDiv) stepDetailDiv.style.display = 'none';
+            el.removeEventListener('click', (e) => {});
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const detail = el.querySelector('.step-detail-expand');
+                if(detail) detail.style.display = detail.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+        // 3. 注意事项点击展开
+        const noticeBlock = document.querySelector('.notice-clickable');
+        if(noticeBlock) {
+            const expandDiv = noticeBlock.querySelector('.notice-expand');
+            if(expandDiv) expandDiv.style.display = 'none';
+            noticeBlock.removeEventListener('click', (e) => {});
+            noticeBlock.addEventListener('click', () => {
+                const target = noticeBlock.querySelector('.notice-expand');
+                if(target) target.style.display = target.style.display === 'block' ? 'none' : 'block';
+            });
+        }
+    }
+
+    function renderDoc(key) {
+        const doc = TRADE_DOCS[key];
+        if (!doc) { resultArea.innerHTML = `<div class="empty-modern">未找到数据</div>`; return; }
+        
+        // 核心要素
+        let elementsItems = '';
+        if(doc.info && doc.info.length) {
+            doc.info.forEach(item => {
+                const detailHtml = item.detail ? `<div class="detail-expand" style="display:none;"><i class="fas fa-info-circle"></i> ${safeStr(item.detail)}</div>` : '';
+                elementsItems += `<li class="expandable-item" style="cursor:pointer;">
+                    <i class="fas fa-caret-right"></i><span><strong>${safeStr(item.main)}</strong><div class="sub-detail">📘 ${safeStr(item.sub||'')}</div>${detailHtml}</span>
+                    <span class="detail-badge"><i class="fas fa-eye"></i> 点击查看</span>
+                </li>`;
+            });
+        } else { elementsItems = '<li>暂无核心要素数据</li>'; }
+        const elementsHtml = `<div class="info-card"><div class="card-header"><i class="fas fa-clipboard-list"></i><h2>📌 核心要素 · 点击查看详情</h2></div><ul class="elements-list">${elementsItems}</ul></div>`;
+        
+        // 实操步骤（可点击展开详情）
+        let stepsHtml = `<ul class="steps-list">`;
+        if(doc.steps && doc.steps.length) {
+            doc.steps.forEach((step, idx) => {
+                const stepDetailHtml = step.stepDetail ? `<div class="step-detail-expand" style="display:none;"><i class="fas fa-lightbulb"></i> ${safeStr(step.stepDetail)}</div>` : '';
+                stepsHtml += `<li class="step-item" style="cursor:pointer;">
+                    <div class="step-number">${idx+1}</div>
+                    <div class="step-text">
+                        <strong>${safeStr(step.title)}</strong>
+                        <div class="step-note">${safeStr(step.desc)}</div>
+                        ${stepDetailHtml}
+                    </div>
+                    <span class="detail-badge"><i class="fas fa-eye"></i> 点击查看</span>
+                </li>`;
+            });
+        } else { stepsHtml += `<li>暂无实操步骤数据</li>`; }
+        stepsHtml += `</ul>`;
+        const stepsCardHtml = `<div class="steps-card"><div class="card-header"><i class="fas fa-person-walking-arrow-right"></i><h2>📋 实操步骤 · 点击查看详情</h2></div>${stepsHtml}</div>`;
+        
+        // 注意事项
+        const noticeExpand = doc.noticeDetail ? `<div class="notice-expand" style="display:none;">${safeStr(doc.noticeDetail)}</div>` : '';
+        const noticeHtml = `<div class="notice-card"><div class="card-header"><i class="fas fa-triangle-exclamation"></i><h2>⚠️ 制单注意事项 · 点击查看详情</h2></div><div class="notice-content notice-clickable"><i class="fas fa-circle-info"></i> ${safeStr(doc.notice)}${noticeExpand}</div></div>`;
+        
+        // 表格模板
+        const templateTable = buildTableFromRows(doc.tableRows);
+        const templateHtml = `<div class="template-showcase"><div class="template-card-inner"><div class="template-header"><i class="fas fa-table"></i><span>📄 ${safeStr(doc.name)} · 表格化模板</span><div class="badge-view"><i class="fas fa-border-all"></i> 单元格</div></div>${templateTable}</div></div>`;
+        
+        resultArea.innerHTML = `<div class="fade-enter">${elementsHtml}${stepsCardHtml}${noticeHtml}${templateHtml}</div>`;
+        setTimeout(() => { attachDetailListeners(); document.querySelector('.info-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+    }
+    
+    queryBtn.addEventListener('click', () => { 
+        const v = docSelect.value; 
+        if(v && TRADE_DOCS[v]) renderDoc(v); 
+        else resultArea.innerHTML = `<div class="empty-modern">请选择有效类型</div>`; 
+    });
+    if(TRADE_DOCS[docSelect.value]) renderDoc(docSelect.value);
+    else renderDoc('PI');
+</script>
+</body>
+</html>
