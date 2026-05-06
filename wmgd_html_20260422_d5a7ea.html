@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>外贸跟单全流程SOP | 步骤可点·深度细节</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f4f8;
+            font-family: 'Inter', sans-serif;
+            color: #0b2b26;
+            line-height: 1.45;
+            padding: 2rem 1.5rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 2rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .hero {
+            padding: 2rem 2rem 1rem 2rem;
+            border-bottom: 1px solid #eef2f8;
+        }
+
+        .hero h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1F5E3A, #2B7A4B);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero .sub {
+            font-size: 0.9rem;
+            color: #557084;
+            margin-top: 0.6rem;
+            border-left: 3px solid #2c9b5e;
+            padding-left: 1rem;
+        }
+
+        .control-bar {
+            padding: 1.5rem 2rem 1rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 1.2rem;
+            border-bottom: 1px solid #ecf3f7;
+        }
+
+        .select-group {
+            flex: 2;
+            min-width: 240px;
+        }
+
+        .select-group label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #5f7e8c;
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        .custom-select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            background-color: #fafdff;
+            border: 1px solid #dce5ec;
+            border-radius: 1rem;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%233b6e4b" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            cursor: pointer;
+        }
+
+        .btn-query {
+            background: #1F5E3A;
+            border: none;
+            padding: 0.85rem 2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-query:hover {
+            background: #0f442b;
+            transform: translateY(-1px);
+        }
+
+        /* 术语区域 */
+        .terms-glossary {
+            padding: 1.2rem 2rem 1.5rem 2rem;
+            background: #fefef9;
+            border-bottom: 1px solid #eef0e8;
+        }
+
+        .terms-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.2rem;
+        }
+
+        .terms-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .term-card {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 0.8rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #e2ebe5;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 1 0 auto;
+            min-width: 160px;
+        }
+
+        .term-card:hover {
+            transform: translateY(-2px);
+            border-color: #bcd9cb;
+            box-shadow: 0 8px 16px -8px rgba(0,0,0,0.12);
+        }
+
+        .term-icon {
+            width: 40px;
+            height: 40px;
+            background: #eef6f1;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: #2c7a4b;
+        }
+
+        .term-info h4 {
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        /* SOP卡片 */
+        .sop-area {
+            padding: 2rem 2rem 2.8rem 2rem;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .sop-card {
+            background: #ffffff;
+            border-radius: 1.5rem;
+            padding: 1.4rem 1.2rem;
+            border: 1px solid #e9f0f3;
+            transition: 0.25s;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.02);
+        }
+
+        .sop-card:hover {
+            transform: translateY(-4px);
+            border-color: #cde2d5;
+            box-shadow: 0 20px 28px -12px rgba(0,0,0,0.12);
+        }
+
+        .card-header {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 1px solid #eef3f0;
+            padding-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            background: #eef6f1;
+            border-radius: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #2c7a4b;
+        }
+
+        .step-order-badge {
+            background: #eef6f1;
+            border-radius: 2rem;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #2c7a4b;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .title-wrap h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin: 0.3rem 0 0;
+            color: #1a3a2c;
+        }
+
+        .main-desc {
+            font-size: 0.8rem;
+            color: #57707f;
+            background: #f9fdfb;
+            padding: 0.5rem 0.8rem;
+            border-radius: 1rem;
+            margin: 0.8rem 0;
+        }
+
+        .sub-steps ul {
+            list-style: none;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        .sub-steps li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.8rem;
+            color: #1e3b31;
+            background: #fefefc;
+            padding: 0.4rem 0.3rem;
+            border-radius: 0.8rem;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .sub-steps li:hover {
+            background: #f0f7f2;
+        }
+
+        .step-number {
+            min-width: 1.6rem;
+            height: 1.6rem;
+            background: #eef3ef;
+            border-radius: 1rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #2c7a4b;
+        }
+
+        .sub-steps li i {
+            width: 1.3rem;
+            font-size: 0.85rem;
+            color: #2c9b5e;
+            margin-top: 0.1rem;
+        }
+
+        /* 模态框 (通用) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-container {
+            background: #ffffff;
+            max-width: 550px;
+            width: 90%;
+            border-radius: 2rem;
+            overflow: hidden;
+            transform: scale(0.95);
+            transition: transform 0.2s;
+        }
+        .modal-overlay.active .modal-container {
+            transform: scale(1);
+        }
+        .modal-header {
+            padding: 1.2rem 1.5rem;
+            background: #f9fefb;
+            border-bottom: 1px solid #e0ede6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .modal-header h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1f543f;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f9e8e;
+        }
+        .modal-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .detail-icon {
+            font-size: 2.5rem;
+            text-align: center;
+            background: #eef6f1;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            border-radius: 1.5rem;
+            margin: 0 auto;
+            color: #2c7a4b;
+        }
+        .detail-steps {
+            background: #f6fbf8;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            font-size: 0.85rem;
+        }
+        .detail-steps p {
+            margin: 0.5rem 0;
+        }
+
+        footer {
+            background: #fafefc;
+            padding: 1rem 2rem;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #8eaaba;
+            border-top: 1px solid #eef2f5;
+        }
+        @media (max-width: 750px) {
+            body { padding: 1rem; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .btn-query { width: 100%; justify-content: center; }
+            .control-bar { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1><i class="fas fa-earth-asia"></i> 外贸跟单全流程SOP · 细节可点版</h1>
+        <div class="sub">点击任意子步骤（如“订舱获S/O”）→ 查看详细操作+注意事项+示意图 | 每个细节都清晰</div>
+    </div>
+
+    <div class="control-bar">
+        <div class="select-group">
+            <label><i class="fas fa-diagram-project"></i> 选择业务阶段</label>
+            <select id="processSelect" class="custom-select">
+                <option value="presale">📋 接单与前期准备</option>
+                <option value="production">🏭 生产与备货</option>
+                <option value="shipment">🚢 出运，交单，收汇</option>
+            </select>
+        </div>
+        <button id="queryBtn" class="btn-query"><i class="fas fa-magnifying-glass"></i> 查询SOP明细</button>
+    </div>
+
+    <!-- 术语区域（可点击） -->
+    <div class="terms-glossary">
+        <div class="terms-header">
+            <i class="fas fa-graduation-cap"></i>
+            <h3>📌 外贸术语图解 · 点击卡片查看详情</h3>
+        </div>
+        <div class="terms-grid" id="termsGrid"></div>
+    </div>
+
+    <div class="sop-area">
+        <div class="section-title">
+            <h2 id="dynamicTitle"><i class="fas fa-list-ol"></i> 标准操作流程 · 点击子步骤获取深度指南</h2>
+            <div class="badge" style="background:#eef6f0; padding:0.3rem 1rem; border-radius:40px;"><i class="fas fa-hand-pointer"></i> 点击细分条目查看更多</div>
+        </div>
+        <div id="stepsGrid" class="steps-grid"></div>
+    </div>
+    <footer>
+        <i class="fas fa-lightbulb"></i> 术语卡片 + SOP子步骤 均可点击 → 获得详细实操指引、示意图与避坑建议
+    </footer>
+</div>
+
+<!-- 通用模态框 -->
+<div id="detailModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 id="modalTitle"><i class="fas fa-info-circle"></i> 操作详情</h3>
+            <button class="close-modal" id="closeDetailModalBtn">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+    // ======================== 1. 术语数据集（保持原有） ========================
+    const termsData = [
+        { id: "lc", shortName: "L/C 信用证", fullName: "信用证 (Letter of Credit)", icon: "fas fa-file-invoice-dollar", description: "银行根据买方要求开立的付款承诺，卖方提交相符单据即可获得付款。", diagram: "🏦 开证行 → 📄 相符单据 → 💵 付款", usage: "大额或首次交易，降低风险。" },
+        { id: "tt", shortName: "T/T 电汇", fullName: "电汇 (Telegraphic Transfer)", icon: "fas fa-bolt", description: "通过银行电子转账，分前T/T和后T/T。", diagram: "💻 买方汇款 → 🏦 中间行 → 💰 卖方账户", usage: "老客户或小额订单，快捷。" },
+        { id: "bl", shortName: "B/L 提单", fullName: "提单 (Bill of Lading)", icon: "fas fa-ship", description: "货权凭证，可转让。", diagram: "📦 发货 → 🚢 提单 → ✍️ 背书 → 🚛 提货", usage: "核心单证，结汇必备。" },
+        { id: "pi", shortName: "P/I 形式发票", fullName: "形式发票 (Proforma Invoice)", icon: "fas fa-receipt", description: "报价确认函，用于申请外汇或开证。", diagram: "报价 → P/I确认 → 订单依据", usage: "成交前关键文件。" },
+        { id: "so", shortName: "S/O 订舱单", fullName: "订舱单 (Shipping Order)", icon: "fas fa-truck", description: "船公司放舱通知，凭此安排拖车报关。", diagram: "订舱委托 → S/O下发 → 拖车/截关", usage: "物流启动指令。" },
+        { id: "tradeTerms", shortName: "FOB / CIF", fullName: "贸易术语", icon: "fas fa-globe", description: "FOB买方负责运输，CIF卖方负责运保费。", diagram: "FOB: 卖方货交船上；CIF: 卖方包运保险", usage: "风险费用划分。" },
+        { id: "co", shortName: "原产地证", fullName: "原产地证书", icon: "fas fa-stamp", description: "享受关税优惠的证明。", diagram: "申请 → 签发 → 清关减税", usage: "减免关税凭证。" }
+    ];
+    function buildTermsGrid() {
+        const grid = document.getElementById('termsGrid');
+        if(!grid) return;
+        grid.innerHTML = '';
+        termsData.forEach(term => {
+            const card = document.createElement('div');
+            card.className = 'term-card';
+            card.innerHTML = `<div class="term-icon"><i class="${term.icon}"></i></div><div class="term-info"><h4>${term.shortName}</h4><p>${term.fullName}</p></div>`;
+            card.addEventListener('click', () => showTermModal(term));
+            grid.appendChild(card);
+        });
+    }
+    function showTermModal(term) {
+        const modal = document.getElementById('detailModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        modalTitle.innerHTML = `<i class="${term.icon}"></i> ${term.fullName}`;
+        modalBody.innerHTML = `
+            <div class="detail-icon"><i class="${term.icon}"></i></div>
+            <div class="detail-steps">
+                <strong>📖 详细解释：</strong><br>${term.description}<br><br>
+                <strong>🎨 示意图解：</strong><br>${term.diagram}<br><br>
+                <strong>💡 常见用途：</strong><br>${term.usage}
+            </div>
+        `;
+        modal.classList.add('active');
+    }
+
+    // ======================== 2. SOP 数据结构（扩展：每个子步骤增加 detail 详细内容） ========================
+    // 为满足“订舱获取S/O”等细节点击，我们为关键子步骤添加详细操作指南
+    const sopLibrary = {
+        presale: {
+            steps: [
+                { letter: "A", title: "订单接收与确认", icon: "fas fa-file-signature", mainDesc: "接收并核对客户订单，确保信息完整。",
+                  subSteps: [
+                      { text: "接收客户采购订单/合同（邮件/ERP）", icon: "fas fa-envelope", detail: "📌 操作细节：每日定时检查邮箱及ERP系统；下载附件保存至跟单文件夹。注意：确认文件格式是否为PDF/Excel，检查客户签字或电子章。" },
+                      { text: "核对产品编码、数量、单价、贸易术语", icon: "fas fa-check-double", detail: "🔍 核对清单：产品编码需与BOM一致；数量不能有误；贸易术语（FOB/CIF）影响运费责任。建议用对勾表逐项核对。" },
+                      { text: "确认特殊要求（标签、包装、测试报告）", icon: "fas fa-clipboard", detail: "⚠️ 注意：客户可能在备注中提出特殊唛头、防水包装、SGS测试等，必须列入内部生产指示书。" },
+                      { text: "双方盖章回签并归档", icon: "fas fa-folder-open", detail: "📁 归档规范：按客户+订单号创建子文件夹，保存双方盖章件，并同步到共享盘。" }
+                  ] },
+                { letter: "B", title: "付款方式确认", icon: "fas fa-credit-card", mainDesc: "明确结算条款，规避风险。",
+                  subSteps: [
+                      { text: "确认付款方式：T/T, L/C, D/P", icon: "fas fa-hand-holding-usd", detail: "💵 T/T: 前T/T需收到30%定金再排产；L/C: 需审证软条款；D/P: 风险较高，建议投保信用险。" },
+                      { text: "预审信用证草稿（识别软条款）", icon: "fas fa-file-invoice", detail: "🔐 审证要点：检查效期、最迟装运期、单据要求（是否要求第三方检验报告）、有无额外费用条款。" },
+                      { text: "确认银行资质", icon: "fas fa-building-columns", detail: "🏦 确认开证行信誉（是否知名银行），小银行建议加保兑。" },
+                      { text: "出具形式发票(PI)并签署", icon: "fas fa-receipt", detail: "📄 PI必须包含所有交易条件，客户签字回传后方可执行。" }
+                  ] },
+                { letter: "C", title: "内部订单下达与生产计划", icon: "fas fa-tasks", mainDesc: "转化内部需求，锁定排程。",
+                  subSteps: [
+                      { text: "生成内部工单，录入ERP", icon: "fas fa-database", detail: "🖥️ ERP操作：创建销售订单，系统自动生成生产任务号，关联BOM。" },
+                      { text: "PMC排产评审", icon: "fas fa-people-arrows", detail: "🗓️ 组织订单评审会：确定关键节点（物料到货、上线、包装），输出甘特图。" },
+                      { text: "物料需求计划", icon: "fas fa-cubes", detail: "📦 根据BOM生成采购申请，确认长交期物料提前下单。" },
+                      { text: "输出生产主计划表", icon: "fas fa-calendar-week", detail: "📅 计划表需发给车间、采购、质量部，每日更新进度。" }
+                  ] },
+                { letter: "D", title: "客户样品确认", icon: "fas fa-flask", mainDesc: "产前样审批，规避批量风险。",
+                  subSteps: [
+                      { text: "安排打样，制作产前样", icon: "fas fa-microscope", detail: "🔬 打样流程：提供详细样品单，包括材质、颜色、尺寸，跟踪样品完成。" },
+                      { text: "寄送样品并附带规格书", icon: "fas fa-truck-fast", detail: "📦 使用国际快递（DHL/FedEx），保留运单号，通知客户单号。" },
+                      { text: "追踪客户反馈，修改直至批准", icon: "fas fa-message", detail: "💬 每3天跟进一次，客户提出的修改意见需记录并再次打样确认。" },
+                      { text: "获取书面样品确认书", icon: "fas fa-stamp", detail: "✅ 必须拿到客户签字或邮件确认的样品承认书，方可批量生产。" }
+                  ] }
+            ] },
+        production: {
+            steps: [
+                { letter: "①", title: "物料采购与齐套", icon: "fas fa-boxes", mainDesc: "确保物料准时齐套。",
+                  subSteps: [
+                      { text: "下达采购订单", icon: "fas fa-cart-shopping", detail: "📑 采购单需明确交货日期、质量标准、验收条款。给供应商确认回传。" },
+                      { text: "跟催交期", icon: "fas fa-chart-simple", detail: "⏰ 每周更新采购进度表，对延期物料预警，推动备选方案。" },
+                      { text: "来料检验入库", icon: "fas fa-clipboard-list", detail: "🔍 IQC按抽样标准检验，合格品贴绿色标签入库，不合格退货。" },
+                      { text: "齐套盘点预警", icon: "fas fa-boxes-stacked", detail: "📊 生产前3天进行齐套会，缺料立刻升级处理。" }
+                  ] },
+                { letter: "②", title: "生产排程与下发", icon: "fas fa-calendar-alt", mainDesc: "科学排产。",
+                  subSteps: [
+                      { text: "日排程单", icon: "fas fa-chalkboard", detail: "📋 每日下达班组日计划，明确产量目标。" },
+                      { text: "下发工单指导书", icon: "fas fa-file-pdf", detail: "📄 作业指导书需更新版本，悬挂工位。" },
+                      { text: "首件确认", icon: "fas fa-ruler-combined", detail: "✅ 首件经质检确认合格后方可批量生产，保留首件记录。" },
+                      { text: "产前会", icon: "fas fa-chalkboard-user", detail: "👥 召集班组长宣导工艺难点和注意事项。" }
+                  ] },
+                { letter: "③", title: "生产过程跟进", icon: "fas fa-chart-line", mainDesc: "实时监控进度。",
+                  subSteps: [
+                      { text: "产量统计", icon: "fas fa-chart-simple", detail: "📈 每小时记录产出，对比目标，偏差超过10%立即分析原因。" },
+                      { text: "巡线记录", icon: "fas fa-people-walking", detail: "🚶 巡检关键工位，记录异常及处理结果。" },
+                      { text: "异常响应", icon: "fas fa-bell", detail: "🚨 15分钟内响应停线问题，组织技术、质量到场。" },
+                      { text: "生产日报", icon: "fas fa-newspaper", detail: "📰 日报包含达成率、异常汇总，抄送销售跟单。" }
+                  ] },
+                { letter: "④", title: "质量检验与控制", icon: "fas fa-clipboard-check", mainDesc: "全流程质量管控。",
+                  subSteps: [
+                      { text: "IPQC巡检", icon: "fas fa-clipboard", detail: "🔎 每2小时巡检，填写《制程检验记录表》。" },
+                      { text: "CTQ专项测试", icon: "fas fa-flask", detail: "🧪 对关键尺寸、性能进行抽测。" },
+                      { text: "不合格品隔离", icon: "fas fa-triangle-exclamation", detail: "⚠️ 红色区域隔离，评审后返工或报废。" },
+                      { text: "成品抽检报告", icon: "fas fa-file-signature", detail: "📄 出具FQC报告，合格品方可入库。" }
+                  ] },
+                { letter: "⑤", title: "成品包装与标识", icon: "fas fa-box-open", mainDesc: "按客户要求包装。",
+                  subSteps: [
+                      { text: "规范装箱", icon: "fas fa-cube", detail: "📦 按照包装规范装箱，使用防护材料。" },
+                      { text: "粘贴麦头标签", icon: "fas fa-tag", detail: "🏷️ 标签内容: 品名、数量、毛净重、目的地，拍照留底。" },
+                      { text: "称重测量", icon: "fas fa-weight-hanging", detail: "⚖️ 准确记录每箱重量、尺寸，用于报关。" },
+                      { text: "拍照入库", icon: "fas fa-camera", detail: "📸 拍摄外箱六面照片及内部填充，发给客户确认。" }
+                  ] }
+            ] },
+        shipment: {
+            steps: [
+                { letter: "①", title: "订舱与拖车安排", icon: "fas fa-ship", mainDesc: "确保货物及时出运。",
+                  subSteps: [
+                      { text: "订舱获S/O", icon: "fas fa-file-export", detail: "🚢 订舱细节：向货代发送托书（包含件重尺、目的港、发货日期），获取S/O后核对船名航次、截关时间。注意：提前1-2周订舱，旺季需更早。S/O需打印给拖车司机。" },
+                      { text: "安排拖车", icon: "fas fa-truck", detail: "🚛 拖车安排：凭S/O联系车队，确认装货时间、地点。司机需凭S/O去堆场提空箱。提醒司机检查箱体是否破损。装货后拍照封签。" },
+                      { text: "监装拍照", icon: "fas fa-camera-retro", detail: "📸 监装要点：拍摄空箱、半箱、满箱、封条号照片，留存作为证明。记录封条号并核对。" },
+                      { text: "发送装货通知", icon: "fas fa-envelope-open-text", detail: "📧 通知客户已装船，提供船名航次、ETD、提单号，便于买方准备清关。" }
+                  ] },
+                { letter: "②", title: "出口报关与查验", icon: "fas fa-file-export", mainDesc: "合规申报，顺利放行。",
+                  subSteps: [
+                      { text: "准备报关资料", icon: "fas fa-folder-open", detail: "📑 必备：发票、箱单、合同、申报要素、委托书。确保数据一致。" },
+                      { text: "单一窗口申报", icon: "fas fa-laptop-code", detail: "💻 电子申报，预审后发送，获取报关单号。" },
+                      { text: "配合海关查验", icon: "fas fa-search", detail: "🔍 若被布控，需到场配合开箱，提供解释材料。" },
+                      { text: "获取放行通知书", icon: "fas fa-check-circle", detail: "✅ 收到海关放行指令后，方可装船。" }
+                  ] },
+                { letter: "③", title: "结汇单据制作与核对", icon: "fas fa-file-invoice-dollar", mainDesc: "缮制全套单据。",
+                  subSteps: [
+                      { text: "制作发票箱单", icon: "fas fa-receipt", detail: "📄 发票金额与报关一致，箱单需体现每箱明细。" },
+                      { text: "申办原产地证", icon: "fas fa-globe", detail: "🌐 在贸促会或海关申请，电子签章。" },
+                      { text: "核对提单", icon: "fas fa-ship", detail: "⚓ 重点核对: 收货人、通知方、品名、唛头、件重尺，确认无误后确认提单草稿。" },
+                      { text: "受益人证明", icon: "fas fa-stamp", detail: "📌 按信用证要求出具装运通知、船证等。" }
+                  ] },
+                { letter: "④", title: "交单与结算", icon: "fas fa-hand-holding-usd", mainDesc: "安全交单，跟进回款。",
+                  subSteps: [
+                      { text: "银行交单", icon: "fas fa-building-columns", detail: "🏦 信用证项下，全套单据递交议付行，审核无误后寄往开证行。" },
+                      { text: "电放/寄正本", icon: "fas fa-truck-fast", detail: "📬 电放需出具电放保函，正本提单用快递寄送并跟踪签收。" },
+                      { text: "发送装运通知", icon: "fas fa-mail-bulk", detail: "📧 邮件告知客户船名、航次、提单号、预计到港日。" },
+                      { text: "追踪付款", icon: "fas fa-chart-line", detail: "💰 T/T后跟踪客户水单，L/C跟踪银行承兑状态。" }
+                  ] },
+                { letter: "⑤", title: "收汇与核销/退税", icon: "fas fa-chart-simple", mainDesc: "资金回笼，闭环归档。",
+                  subSteps: [
+                      { text: "外汇到账申报", icon: "fas fa-dollar-sign", detail: "💵 登录国家外汇管理局平台申报，结汇。" },
+                      { text: "核销", icon: "fas fa-file-circle-check", detail: "✔️ 已取消纸质核销，系统自动匹配。" },
+                      { text: "整理退税资料", icon: "fas fa-folder-tree", detail: "📂 报关单、发票、提单、进货发票等整理成册。" },
+                      { text: "退税跟踪", icon: "fas fa-coins", detail: "💰 在税务局系统申报，关注退税款到账。" }
+                  ] }
+            ] }
+    };
+
+    // 渲染子步骤列表，为每个li绑定点击事件
+    function renderSubStepsWithClick(subSteps) {
+        if(!subSteps?.length) return '<div class="sub-steps"><div class="sub-title">无细分步骤</div></div>';
+        let html = '<div class="sub-steps"><div class="sub-title"><i class="fas fa-diagram-successor"></i> 细分操作指引 (点击查看详情)</div><ul>';
+        subSteps.forEach((step, idx) => {
+            const number = idx+1;
+            const detailAttr = step.detail ? step.detail : '暂无额外细节，请参考主步骤说明。';
+            // 存储detail数据到自定义属性，通过js绑定事件
+            html += `<li data-detail="${escapeHtml(detailAttr)}" data-title="${escapeHtml(step.text)}" data-icon="${step.icon}" style="cursor:pointer;">
+                        <div class="step-number">${number}</div>
+                        <i class="${step.icon}"></i>
+                        <span>${escapeHtml(step.text)}</span>
+                     </li>`;
+        });
+        html += '</ul></div>';
+        return html;
+    }
+
+    function escapeHtml(str) {
+        if(!str) return '';
+        return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;});
+    }
+
+    // 渲染SOP卡片，并绑定子步骤点击事件（事件委托）
+    function renderSOP(selectedValue) {
+        const flowData = sopLibrary[selectedValue];
+        if(!flowData) { document.getElementById('stepsGrid').innerHTML = '<div class="empty-placeholder">请选择有效大类</div>'; return; }
+        const stepsArray = flowData.steps;
+        let cardsHtml = '';
+        stepsArray.forEach((step, idx) => {
+            const subStepsHtml = renderSubStepsWithClick(step.subSteps);
+            cardsHtml += `
+                <div class="sop-card">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="${step.icon}"></i></div>
+                        <div class="title-wrap">
+                            <div class="step-meta"><span class="step-order-badge"><i class="fas fa-sort-numeric-down"></i> 第 ${idx+1} 步</span><span class="step-letter">${step.letter}</span></div>
+                            <h3>${escapeHtml(step.title)}</h3>
+                        </div>
+                    </div>
+                    <div class="main-desc"><i class="fas fa-info-circle"></i> ${escapeHtml(step.mainDesc)}</div>
+                    ${subStepsHtml}
+                </div>
+            `;
+        });
+        document.getElementById('stepsGrid').innerHTML = cardsHtml;
+        // 绑定子步骤点击事件 (事件委托)
+        const grid = document.getElementById('stepsGrid');
+        grid.querySelectorAll('.sub-steps li').forEach(li => {
+            li.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const title = li.getAttribute('data-title') || '操作细节';
+                const detail = li.getAttribute('data-detail') || '暂无详细说明';
+                const icon = li.querySelector('i')?.className || 'fas fa-info-circle';
+                showStepDetailModal(title, detail, icon);
+            });
+        });
+        // 更新标题
+        const titleMap = { presale: '📋 接单与前期准备', production: '🏭 生产与备货', shipment: '🚢 出运/交单/收汇' };
+        document.getElementById('dynamicTitle').innerHTML = `<i class="fas fa-list-ol"></i> ${titleMap[selectedValue]} · 点击子步骤获取深度指南`;
+    }
+
+    // 显示子步骤详情模态框
+    function showStepDetailModal(title, detail, iconClass) {
+        const modal = document.getElementById('detailModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        modalTitle.innerHTML = `<i class="${iconClass}"></i> ${title}`;
+        modalBody.innerHTML = `
+            <div class="detail-icon"><i class="${iconClass}"></i></div>
+            <div class="detail-steps">
+                <strong>📘 详细操作指南 & 注意事项：</strong><br>
+                <div style="margin-top:8px; line-height:1.5;">${escapeHtml(detail)}</div>
+                <hr style="margin:12px 0; border-color:#e0ede6;">
+                <p><i class="fas fa-lightbulb"></i> <strong>小贴士：</strong> 建议将此步骤加入跟单checklist，完成后打钩，避免遗漏。</p>
+            </div>
+        `;
+        modal.classList.add('active');
+    }
+
+    // 关闭模态框
+    function closeModal() {
+        const modal = document.getElementById('detailModal');
+        modal.classList.remove('active');
+    }
+
+    // 页面初始化
+    window.addEventListener('DOMContentLoaded', () => {
+        buildTermsGrid();
+        renderSOP('presale');
+        document.getElementById('processSelect').value = 'presale';
+        document.getElementById('queryBtn').addEventListener('click', () => {
+            renderSOP(document.getElementById('processSelect').value);
+        });
+        const closeBtn = document.getElementById('closeDetailModalBtn');
+        if(closeBtn) closeBtn.addEventListener('click', closeModal);
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('detailModal');
+            if(e.target === modal) closeModal();
+        });
+    });
+</script>
+</body>
+</html>
