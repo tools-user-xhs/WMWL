@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>外贸跟单·避坑思维工具 | 分类智控版</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f2f5;
+            font-family: 'Inter', sans-serif;
+            padding: 40px 24px;
+            color: #1e293b;
+        }
+
+        .smart-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 32px;
+            text-align: left;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            background: #ffffffcc;
+            backdrop-filter: blur(4px);
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #2c3e66;
+            letter-spacing: 0.3px;
+            margin-bottom: 18px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .badge i {
+            margin-right: 8px;
+            font-size: 0.9rem;
+            color: #2d6a4f;
+        }
+        h1 {
+            font-size: 2.1rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #1E3C2C, #2C5F2D);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+        .sub {
+            color: #5b6e8c;
+            font-size: 1rem;
+            font-weight: 400;
+            border-left: 3px solid #2d6a4f;
+            padding-left: 14px;
+            margin-top: 8px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02), 0 2px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 28px;
+            border: 1px solid #eef2f6;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 28px 12px 28px;
+            border-bottom: 1px solid #eff3f8;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .card-header i {
+            font-size: 1.6rem;
+            color: #2d6a4f;
+        }
+        .card-header h2 {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #0f2b1d;
+        }
+
+        .card-body {
+            padding: 24px 28px 32px 28px;
+        }
+
+        /* 主选择区 */
+        .selector-area {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 24px;
+            background: #fcfdfe;
+            border-radius: 22px;
+            padding: 8px 0 12px 0;
+        }
+        .select-group {
+            flex: 2;
+            min-width: 220px;
+        }
+        .select-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #5e6f8d;
+            margin-bottom: 8px;
+        }
+        .custom-select {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 0.95rem;
+            font-family: 'Inter', monospace;
+            background: #ffffff;
+            border: 1px solid #dce3ec;
+            border-radius: 20px;
+            color: #1e2a3e;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%233b4b5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+        }
+        .custom-select:focus {
+            outline: none;
+            border-color: #2d6a4f;
+            box-shadow: 0 0 0 3px rgba(45,106,79,0.1);
+        }
+        .btn-query {
+            background: #1e3c2c;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .btn-query:hover {
+            background: #2c5f2d;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(33,85,48,0.15);
+        }
+
+        /* 分类标签组 */
+        .category-tabs {
+            margin: 16px 0 8px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 1px solid #eef2f8;
+            padding-bottom: 12px;
+        }
+        .cat-btn {
+            background: transparent;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 32px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            font-family: 'Inter', sans-serif;
+            color: #4a5b7a;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .cat-btn i {
+            font-size: 0.8rem;
+        }
+        .cat-btn.active {
+            background: #2d6a4f10;
+            color: #1e5a3a;
+            font-weight: 600;
+            border: 1px solid #d0e2d4;
+            background: #f0f9f4;
+        }
+        .cat-btn:hover:not(.active) {
+            background: #f8fafd;
+            color: #2c5f2d;
+        }
+
+        .insight-box {
+            background: #fafcff;
+            border-radius: 24px;
+            padding: 8px 0 16px 0;
+        }
+        .topic-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-left: 4px solid #2d6a4f;
+            padding-left: 16px;
+        }
+        .grid-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .advice-item {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1px solid #eef2f8;
+            transition: all 0.2s;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .advice-item:hover {
+            border-color: #cbdde9;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        .item-header {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 600;
+            color: #1f3b2c;
+            font-size: 1rem;
+            user-select: none;
+        }
+        .item-header i.fa-chevron-down {
+            color: #8aa0b5;
+            transition: transform 0.2s ease;
+            font-size: 0.9rem;
+        }
+        .item-detail {
+            padding: 0 20px 20px 20px;
+            border-top: 1px solid #f0f4fa;
+            background: #fefefe;
+            display: none;
+        }
+        .advice-item.open .item-detail {
+            display: block;
+        }
+        .advice-item.open .item-header i.fa-chevron-down {
+            transform: rotate(180deg);
+        }
+        .risk-detail {
+            background: #FEF9E6;
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            border-left: 3px solid #e6a017;
+        }
+        .solution-detail {
+            background: #EFFAF5;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            border-left: 3px solid #2d6a4f;
+        }
+        .badge-priority-sm {
+            display: inline-block;
+            background: #f1f5f9;
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 40px;
+            margin-left: 12px;
+            font-weight: normal;
+        }
+
+        .priority-table-wrapper {
+            overflow-x: auto;
+            border-radius: 20px;
+            margin-top: 12px;
+        }
+        .priority-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .priority-table th {
+            text-align: left;
+            padding: 16px 16px;
+            background-color: #f8fafd;
+            font-weight: 600;
+            color: #2c5f2d;
+            border-bottom: 1px solid #e2edf2;
+        }
+        .priority-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #eff3f8;
+            vertical-align: top;
+        }
+        .priority-high {
+            background: #fee2e2;
+            color: #b91c1c;
+            font-weight: 600;
+            border-radius: 40px;
+            display: inline-block;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+        }
+        .priority-medium {
+            background: #fff0db;
+            color: #c2410c;
+            font-weight: 600;
+            border-radius: 40px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            display: inline-block;
+        }
+        .priority-low {
+            background: #e6f7ec;
+            color: #2d6a4f;
+            font-weight: 600;
+            border-radius: 40px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            display: inline-block;
+        }
+        .deadline {
+            font-family: monospace;
+            font-weight: 500;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #7f8c9a;
+            font-size: 0.75rem;
+            border-top: 1px solid #e4e9f0;
+            padding-top: 24px;
+        }
+        @media (max-width: 680px) {
+            body { padding: 20px 16px; }
+            .card-body { padding: 18px; }
+            .selector-area { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+<div class="smart-container">
+    <div class="header">
+        <div class="badge">
+            <i class="fas fa-brain"></i> 跟单思维引擎 · 分类驱动
+        </div>
+        <h1>外贸跟单避坑思维工具</h1>
+        <div class="sub">分类核查 · 优先级规划 · 高效跟单</div>
+    </div>
+
+    <!-- 主卡片：主题选择 -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-compass"></i>
+            <h2>选择思维模块</h2>
+        </div>
+        <div class="card-body">
+            <div class="selector-area">
+                <div class="select-group">
+                    <label><i class="far fa-list-alt"></i> 主题</label>
+                    <select id="topicSelect" class="custom-select">
+                        <option value="A">A：工作安排 · 分类核查清单</option>
+                        <option value="B">B：优先级排序 · 轻重缓急</option>
+                        <option value="C">C：提前规划 · 从容出货准备</option>
+                        <option value="D">D：文件盘点习惯 · 数字化干净归档</option>
+                    </select>
+                </div>
+                <button id="queryBtn" class="btn-query"><i class="fas fa-gem"></i> 查询洞察</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 动态内容区域 -->
+    <div class="card" id="resultCard">
+        <div class="card-header">
+            <i class="fas fa-chalkboard-user"></i>
+            <h2>深度分析 & 避坑指南</h2>
+        </div>
+        <div class="card-body" id="dynamicContent">
+            <div class="insight-box">
+                <div class="topic-title">
+                    <i class="fas fa-check-circle" style="color:#2d6a4f;"></i> 
+                    <span id="topicLabel">工作安排 · 分类跟单避坑</span>
+                </div>
+                <!-- 分类按钮区域 (仅当主题为A或B时可见) -->
+                <div id="categoryNav" style="display: none;">
+                    <div class="category-tabs" id="categoryTabs">
+                        <button class="cat-btn" data-cat="all"><i class="fas fa-layer-group"></i> 全部事项</button>
+                        <button class="cat-btn" data-cat="material"><i class="fas fa-boxes"></i> 物料与供应链</button>
+                        <button class="cat-btn" data-cat="production"><i class="fas fa-industry"></i> 生产与品质</button>
+                        <button class="cat-btn" data-cat="doc"><i class="fas fa-file-invoice"></i> 文件与单证</button>
+                    </div>
+                </div>
+                <div id="adviceList" class="grid-list">
+                    <!-- 动态列表卡片 -->
+                </div>
+            </div>
+            <!-- 优先级规划表模块 -->
+            <div style="margin-top: 36px;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
+                    <i class="fas fa-table-list" style="color: #1f5e3a;"></i>
+                    <h3 style="font-weight: 600; font-size: 1.2rem;">📋 跟单优先级规划表</h3>
+                </div>
+                <div class="priority-table-wrapper" id="priorityTableContainer">
+                    <!-- 表格会依据当前分类进行筛选展示 -->
+                </div>
+                <p style="font-size: 0.7rem; margin-top: 12px; color: #6c7a91;"><i class="fas fa-lightbulb"></i> 根据事项紧急重要程度分级，支持按分类筛选，高效规划跟单节奏。</p>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <i class="far fa-clock"></i> 实时避坑策略 | 分类聚焦 · 快速定位风险点
+    </footer>
+</div>
+
+<script>
+    // ---------- 带分类的工作安排数据 (A/B主题核心，同时用于优先级表格) ----------
+    const workItems = [
+        { task: "📦 物料到齐确认", riskDetail: "核查BOM表，确认所有原材料/辅料实际到库数量、质量。高风险/长交期物料需提前预警。", solution: "建立物料追踪表，每周两次与PMC核对。提前识别高损耗物料水位线，设置最小安全库存。", category: "material", priority: "高", reason: "影响整体交货进度或存在缺料停线风险", deadline: "24小时内复核" },
+        { task: "⚠️ 高频/高风险物料缺料风险", riskDetail: "排查连续使用快周转的电子元件/包材，是否存在断供可能？是否已经触达再订货点？", solution: "设置动态再订货点，与供应商签订VMI协议或安全库存协议，避免产线停摆。", category: "material", priority: "高", reason: "高频消耗物料一旦短缺导致产线停摆", deadline: "立即核查库存并下达补货单" },
+        { task: "🚢 在途物料追踪", riskDetail: "海上/陆运在途部件ETA及清关状态，是否会影响总装？", solution: "使用物流看板+船司官网实时监控，每周一三五更新ETA异常预警。", category: "material", priority: "中", reason: "影响排程但已有缓冲计划，仍需每日关注", deadline: "每2天更新状态" },
+        { task: "✅ 成品/半成品准备好及配套文件", riskDetail: "哪些产品已完成生产待验？验货报告、箱单、测试证书是否齐全？", solution: "每日更新生产报表，提前3天完成验货预约，并归档所有合规文件至共享云盘。", category: "production", priority: "高", reason: "文件缺失会致使出货延误或目的港清关失败", deadline: "出货前7天准备完毕" },
+        { task: "📊 产能与验货排期", riskDetail: "工厂产能饱和度？第三方验货（如SGS）档期是否与交期冲突？", solution: "提前10天锁定验货日期，并与计划部门沟通预留缓冲期。", category: "production", priority: "中", reason: "预约失败影响出货，但可提前安排", deadline: "出货前10天锁定验货" },
+        { task: "📎 唛头/标签/包装规范", riskDetail: "外箱唛头、条形码、环保标是否客户最新版？", solution: "包装样板首件确认制度，拍照留档并邮件二次确认。", category: "production", priority: "中", reason: "唛头错误导致罚款或目的港无法提货", deadline: "生产包装前48h确认" },
+        { task: "🔧 客供品/模具状态", riskDetail: "客户提供的模具、专用物料状态是否正常？", solution: "定期维护保养记录，每次使用前点检，出现磨损及时反馈客户补供。", category: "production", priority: "低", reason: "影响模具寿命但短期无碍，需定期跟踪", deadline: "每周点检一次" },
+        { task: "📑 订单变更与客户特殊要求", riskDetail: "客户ECO/设计变更是否同步到采购和生产？避免返工", solution: "变更管理台账登记，并召开跨部门评审，更新工艺文件及采购订单。", category: "doc", priority: "高", reason: "订单变更若未闭环将造成批量返工损失", deadline: "收到变更24h内同步" },
+        { task: "💼 法务/单证合规", riskDetail: "原产地证、大使馆认证、船证明等特殊单证是否齐备？", solution: "设立单证日历，在出货前7天提醒单证同事准备所有清关文件。", category: "doc", priority: "高", reason: "单证不符直接导致无法退税或海关扣留", deadline: "出货前5天双审" }
+    ];
+
+    // 主题C：提前规划，从容出货准备（完全移除订舱相关内容，聚焦资料/文件/衔接）
+    const planningContent = [
+        { title: "📄 出货前PL/CI预审", advice: "在安排出货至少3-5个工作日完成Proforma Invoice & Commercial Invoice 草稿，对照订单核对数量/单价/贸易术语，避免数据错误导致清关异常。", solution: "建立PL/CI模板库，出货前一周启动预审流程，由主管二次核签。" },
+        { title: "📑 全套清关文件一致性", advice: "根据最终PL/CI制作箱单、发票、合同、包装声明等，确保所有文件数据完全一致。", solution: "使用单证核对清单，发邮件前逐项打钩，提前2天发给报关行或代理确认。" },
+        { title: "📌 原产地证 & 特殊单证预申请", advice: "提前确认是否需要原产地证（CO、FORM E）、使领馆认证等特殊单证，预留足够的申请周期。", solution: "建立单证日历，在出货前10天启动申请流程，避免加急费用或无法出证。" },
+        { title: "🔖 信用证项下单据准备", advice: "涉及信用证的需逐条审核单证要求，提前模拟交单，避免不符点扣费。", solution: "信用证交单提前10天模拟交单，并请银行预审，所有条款逐一打勾确认。" },
+        { title: "📎 出货前内装与唛头复核", advice: "在货物装柜/装车之前，最终复核外箱唛头、标签、条形码，保证与客户指示完全一致。", solution: "发货前48h进行最终包装检验并拍照留底，大货样与确认样比对。" }
+    ];
+
+    // 主题D：文件习惯
+    const fileHabits = [
+        { habit: "🏷️ 客户维度主文件夹", advice: "按客户名称创建一级文件夹，内部结构：合同/PO、PI、生产文件、质检报告、出货单证、往来邮件。", solution: "每次项目启动即生成标准子目录，避免文件散落桌面。" },
+        { habit: "📁 总-细-精细化命名规则", advice: "文件名格式：【日期】客户_订单号_文件类型_V版本号，便于全局搜索。", solution: "建立命名规范手册，使用批量重命名工具提高效率。" },
+        { habit: "☁️ 云端+本地同步备份", advice: "关键单证和合同必须同时保存至公司云盘和本地加密盘。", solution: "每周五使用同步工具增量备份，历史版本保留30天。" },
+        { habit: "🗂️ 利用标签/颜色智能分类", advice: "重要待办文件使用⭐标记或红色标签，未完成订单置顶。", solution: "Windows库或OneDrive快速访问，桌面不放任何零散文件。" },
+        { habit: "📅 归档和清理周期", advice: "已完成订单项目从『进行中』移至『已完成』文件夹，并按季度压缩。", solution: "每季度最后一周执行归档，建立年度归档索引表。" }
+    ];
+
+    // DOM 元素
+    const topicSelect = document.getElementById('topicSelect');
+    const queryBtn = document.getElementById('queryBtn');
+    const adviceListDiv = document.getElementById('adviceList');
+    const topicLabelSpan = document.getElementById('topicLabel');
+    const priorityTableContainer = document.getElementById('priorityTableContainer');
+    const categoryNavDiv = document.getElementById('categoryNav');
+    let currentCategory = 'all';
+    let currentMainTheme = 'A';
+
+    // 渲染优先级规划表 (根据分类筛选)
+    function renderPriorityTableByCategory(category) {
+        let filtered = workItems;
+        if (category !== 'all') {
+            filtered = workItems.filter(item => item.category === category);
+        }
+        let html = `<table class="priority-table">
+                        <thead>
+                            <tr><th>事项 / 任务</th><th>优先级</th><th>排序原因 / 避坑逻辑</th><th>建议完成时效</th></tr>
+                        </thead>
+                        <tbody>`;
+        filtered.forEach(item => {
+            let priorityClass = '';
+            let priorityDisplay = '';
+            if (item.priority === '高') {
+                priorityClass = 'priority-high';
+                priorityDisplay = '🔥 高优先级';
+            } else if (item.priority === '中') {
+                priorityClass = 'priority-medium';
+                priorityDisplay = '⚡ 中优先级';
+            } else {
+                priorityClass = 'priority-low';
+                priorityDisplay = '🍃 低优先级';
+            }
+            html += `<tr>
+                        <td style="font-weight:500;">${item.task}</td>
+                        <td><span class="${priorityClass}">${priorityDisplay}</span></td>
+                        <td style="font-size:0.85rem; color:#415a77;">${item.reason}</td>
+                        <td class="deadline">📅 ${item.deadline}</td>
+                      </tr>`;
+        });
+        html += `</tbody>
+                </table>`;
+        priorityTableContainer.innerHTML = html;
+    }
+
+    function bindCardToggle(container) {
+        if (!container) return;
+        const cards = container.querySelectorAll('.advice-item');
+        cards.forEach(card => {
+            card.removeEventListener('click', card._clickHandler);
+            const handler = (e) => {
+                if (e.target.closest('.item-detail')) return;
+                card.classList.toggle('open');
+            };
+            card.addEventListener('click', handler);
+            card._clickHandler = handler;
+        });
+    }
+
+    function renderWorkByCategory(category, theme) {
+        let filtered = workItems;
+        if (category !== 'all') {
+            filtered = workItems.filter(item => item.category === category);
+        }
+        let itemsHtml = '';
+        if (theme === 'A') {
+            filtered.forEach(item => {
+                itemsHtml += `
+                    <div class="advice-item">
+                        <div class="item-header">
+                            <span><i class="fas fa-clipboard-list" style="margin-right: 8px; color:#2d6a4f;"></i> ${item.task}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="item-detail">
+                            <div class="risk-detail"><strong>⚠️ 风险细节：</strong> ${item.riskDetail}</div>
+                            <div class="solution-detail"><strong>✅ 避坑方案：</strong> ${item.solution}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        } else if (theme === 'B') {
+            filtered.forEach(item => {
+                itemsHtml += `
+                    <div class="advice-item">
+                        <div class="item-header">
+                            <span><i class="fas fa-chart-line" style="margin-right: 8px; color:#c2410c;"></i> ${item.task} <span class="badge-priority-sm">${item.priority === '高' ? '紧急优先' : (item.priority === '中' ? '次优先' : '常规监控')}</span></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="item-detail">
+                            <div class="risk-detail"><strong>🎯 优先级原因：</strong> ${item.reason}</div>
+                            <div class="solution-detail"><strong>📌 建议对策：</strong> ${item.solution}</div>
+                            <div style="margin-top: 10px; font-size:0.8rem;"><i class="far fa-hourglass-half"></i> 建议时效：${item.deadline}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        adviceListDiv.innerHTML = itemsHtml;
+        bindCardToggle(adviceListDiv);
+    }
+
+    function renderThemeC() {
+        let itemsHtml = '';
+        planningContent.forEach(p => {
+            itemsHtml += `
+                <div class="advice-item">
+                    <div class="item-header"><span><i class="fas fa-calendar-alt"></i> ${p.title}</span><i class="fas fa-chevron-down"></i></div>
+                    <div class="item-detail">
+                        <div class="risk-detail"><strong>📌 行动策略：</strong> ${p.advice}</div>
+                        <div class="solution-detail"><strong>✅ 避坑落地：</strong> ${p.solution}</div>
+                    </div>
+                </div>
+            `;
+        });
+        adviceListDiv.innerHTML = itemsHtml;
+        bindCardToggle(adviceListDiv);
+    }
+
+    function renderThemeD() {
+        let itemsHtml = '';
+        fileHabits.forEach(f => {
+            itemsHtml += `
+                <div class="advice-item">
+                    <div class="item-header"><span><i class="fas fa-folder-open"></i> ${f.habit}</span><i class="fas fa-chevron-down"></i></div>
+                    <div class="item-detail">
+                        <div class="risk-detail"><strong>📁 执行准则：</strong> ${f.advice}</div>
+                        <div class="solution-detail"><strong>💡 工具建议：</strong> ${f.solution}</div>
+                    </div>
+                </div>
+            `;
+        });
+        adviceListDiv.innerHTML = itemsHtml;
+        bindCardToggle(adviceListDiv);
+    }
+
+    function refreshFull() {
+        const theme = topicSelect.value;
+        currentMainTheme = theme;
+        if (theme === 'A' || theme === 'B') {
+            categoryNavDiv.style.display = 'block';
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.getAttribute('data-cat') === currentCategory) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            if (theme === 'A') {
+                topicLabelSpan.innerHTML = '📌 工作安排 · 分类跟单避坑清单 (点击事项展开)';
+                renderWorkByCategory(currentCategory, 'A');
+            } else {
+                topicLabelSpan.innerHTML = '🎯 优先级排序 · 分类事项归因分析 (点击展开对策)';
+                renderWorkByCategory(currentCategory, 'B');
+            }
+            renderPriorityTableByCategory(currentCategory);
+        } else if (theme === 'C') {
+            categoryNavDiv.style.display = 'none';
+            topicLabelSpan.innerHTML = '⏳ 提前规划 · 从容出货准备 (点击卡片展开策略)';
+            renderThemeC();
+            renderPriorityTableByCategory('all');
+        } else if (theme === 'D') {
+            categoryNavDiv.style.display = 'none';
+            topicLabelSpan.innerHTML = '🗂️ 文件盘点习惯 · 整洁高效数字化归档 (点击卡片展开细则)';
+            renderThemeD();
+            renderPriorityTableByCategory('all');
+        }
+    }
+
+    function initCategoryEvents() {
+        const btns = document.querySelectorAll('.cat-btn');
+        btns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const cat = btn.getAttribute('data-cat');
+                if (!cat) return;
+                currentCategory = cat;
+                refreshFull();
+            });
+        });
+    }
+
+    queryBtn.addEventListener('click', () => {
+        currentCategory = 'all';
+        refreshFull();
+    });
+    topicSelect.addEventListener('change', () => {
+        currentCategory = 'all';
+        refreshFull();
+    });
+
+    refreshFull();
+    initCategoryEvents();
+</script>
+</body>
+</html>
