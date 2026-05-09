@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>外贸跟单 · 避坑思维工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f2f5;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 2rem 1.5rem;
+            color: #1e293b;
+        }
+
+        /* 整体容器 */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* 卡片 – 高级毛玻璃质感 */
+        .card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(0px);
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s ease;
+            border: 1px solid rgba(226, 232, 240, 0.7);
+        }
+
+        /* 头部区域 */
+        .hero {
+            text-align: left;
+            padding: 2rem 2rem 1rem 2rem;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        .hero h1 {
+            font-size: 1.85rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #1F2B3D, #2C3E50);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero .sub {
+            color: #5b6e8c;
+            font-size: 0.95rem;
+            font-weight: 400;
+            margin-top: 0.3rem;
+            border-left: 3px solid #3b82f6;
+            padding-left: 0.75rem;
+        }
+
+        /* 工具栏区域 – 高级简洁 */
+        .toolbar {
+            padding: 1.8rem 2rem 1.5rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 1.5rem;
+            background: #ffffff;
+            border-radius: 2rem 2rem 0 0;
+        }
+
+        .select-group {
+            flex: 2;
+            min-width: 220px;
+        }
+
+        .select-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #5b6e8c;
+            margin-bottom: 0.6rem;
+        }
+
+        .custom-select {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #0f172a;
+            cursor: pointer;
+            transition: all 0.2s;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="%234b5563" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.1rem;
+        }
+
+        .custom-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+            background-color: #ffffff;
+        }
+
+        .btn-query {
+            background: #1e293b;
+            border: none;
+            padding: 0.85rem 2.2rem;
+            border-radius: 1.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.25s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            letter-spacing: 0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-query:hover {
+            background: #0f172a;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px -8px rgba(0,0,0,0.2);
+        }
+
+        .btn-query:active {
+            transform: translateY(1px);
+        }
+
+        /* 内容展示区 – 高端卡片内嵌 */
+        .result-area {
+            margin: 0 2rem 2rem 2rem;
+            border-top: 1px solid #edf2f7;
+            padding-top: 1.5rem;
+        }
+
+        .insight-card {
+            background: #fefefe;
+            border-radius: 1.5rem;
+            border: 1px solid #eef2f8;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            transition: all 0.2s;
+        }
+
+        .pit-section, .solution-section, .analysis-section, .case-section {
+            padding: 1.25rem 1.8rem;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .pit-section {
+            background: #fffaf5;
+            border-left: 6px solid #e11d48;
+        }
+
+        .solution-section {
+            background: #ffffff;
+            border-left: 6px solid #3b82f6;
+        }
+
+        .analysis-section {
+            background: #f8fafc;
+            border-left: 6px solid #10b981;
+        }
+
+        .case-section {
+            background: #ffffff;
+            border-left: 6px solid #f59e0b;
+            border-bottom: none;
+        }
+
+        .section-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #0f172a;
+        }
+
+        .section-title span {
+            font-size: 1.25rem;
+        }
+
+        .content-text {
+            color: #2c3e4e;
+            line-height: 1.55;
+            font-size: 0.95rem;
+        }
+
+        .content-text p {
+            margin-bottom: 0.75rem;
+        }
+
+        .content-text ul, .content-text ol {
+            padding-left: 1.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .content-text li {
+            margin: 0.5rem 0;
+        }
+
+        .badge-pill {
+            display: inline-block;
+            background: #eef2ff;
+            color: #1e40af;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            margin-right: 0.5rem;
+        }
+
+        .case-emphasis {
+            background: #fffbeb;
+            padding: 0.8rem 1rem;
+            border-radius: 1rem;
+            margin-top: 0.5rem;
+            border: 1px solid #ffe4b5;
+            font-size: 0.9rem;
+        }
+
+        hr {
+            margin: 0.5rem 0;
+            border: 0;
+            height: 1px;
+            background: linear-gradient(90deg, #e0e7ff, transparent);
+        }
+
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            padding: 1.5rem 0 0.5rem 0;
+            border-top: 1px solid #eef2f0;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 680px) {
+            body {
+                padding: 1rem;
+            }
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 1.5rem;
+            }
+            .btn-query {
+                justify-content: center;
+            }
+            .result-area {
+                margin: 0 1rem 1.5rem 1rem;
+            }
+            .pit-section, .solution-section, .analysis-section, .case-section {
+                padding: 1rem;
+            }
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="hero">
+            <h1>⚓ 外贸跟单 · 避坑思维工具</h1>
+            <div class="sub">精准识别风险 · 专业跟单决策 · 高级避坑指南</div>
+        </div>
+        <div class="toolbar">
+            <div class="select-group">
+                <label>📌 选择避坑主题</label>
+                <select id="topicSelect" class="custom-select">
+                    <option value="A">🚨 避坑 ONE — 交期延误陷阱</option>
+                    <option value="B">📑 避坑 TWO — 单证数据错漏风险</option>
+                    <option value="C">📦 避坑 THREE — 验货/品质标准模糊</option>
+                </select>
+            </div>
+            <button id="queryBtn" class="btn-query">🔍 查询避坑方案</button>
+        </div>
+        <div class="result-area" id="resultContainer">
+            <!-- 动态内容展示区，初始默认展示A内容，使页面富有信息 -->
+            <div class="insight-card" id="dynamicContent"></div>
+        </div>
+        <footer>高水准跟单思维 | 预防大于补救 · 专业创造价值</footer>
+    </div>
+</div>
+
+<script>
+    // 避坑数据库 (专业详细)
+    const pitfallsData = {
+        A: {
+            title: "避坑 ONE · 生产交期隐形延误",
+            pit: "📌 什么坑？<br> 跟单员小A跟进产品生产交期时，仅获得工厂方口头承诺“2天完成”，结果2天后突然被告知“某关键物料未回厂/紧急缺料”，导致交期被迫推迟，最终空运成本飙升或面临客户索赔。口头承诺无追溯凭证，关键干系人信息不同步，让跟单陷入被动买单风险。",
+            howTo: "✅ 如何避坑（具体做法）<br><br>" +
+                   "<strong>a. 邮件确认闭环 · 关键干系人书面确认：</strong><br>" +
+                   "所有交期承诺必须通过邮件正式沟通，要求生产负责人、采购负责人明确回复确认交期节点。若无回复，主动将沟通记录（微信/通话摘要）以邮件形式发送给对方并要求确认“以上信息无误请回复”。确保每一次承诺都有白纸黑字凭证。<br><br>" +
+                   "<strong>b. 拉通交期共识会 · 现场排期并出具会议纪要：</strong><br>" +
+                   "针对重要订单，主动组织线上或线下交期沟通会，要求PMC、生产主管、采购等关键干系人参会，共同倒排工期并签字确认会议纪要（含时间节点、责任人）。纪要归档统一管理，作为后续跟催及责任追溯依据。",
+            analysis: "💡 做法分析：<br>" +
+                      "• 邮件确认将非正式沟通转化为具备法律效力的证据链，避免“口头答应不认账”，同时提升各环节责任心；一旦延误，可快速定位责任环节，便于索赔或改进。<br>" +
+                      "• 交期会议与纪要实现“事前对齐”，打破信息孤岛，使每个人对交付节点有共同认知。现场排产能暴露潜在资源瓶颈（物料、产能），提前风险预警。好处：降低突发异常概率，提升准时交付率，强化跟单权威。",
+            case: "📖 实际案例：<br>" +
+                  "某外贸公司张经理跟单一批户外家具，工厂口头承诺35天交货。张经理采用邮件向厂长、采购主管发出交期确认函，得到邮件回复“确认35天”。第30天工厂反馈压铸件延误，张经理立即出示邮件凭证，工厂主动承担空运费差价，且后续订单建立会议机制，交期达成率从72%升至94%。"
+        },
+        B: {
+            title: "避坑 TWO · 单证数据不一致/错漏",
+            pit: "📌 什么坑？<br> 单证审核不严谨，导致提单、发票、箱单、原产地证等关键数据相互矛盾（如重量不符、品名差异、HS编码错误）。海关可能扣货、客户无法清关，产生高额改单费、滞港费，甚至丢失订单及信誉。",
+            howTo: "✅ 如何避坑（具体做法）<br><br>" +
+                   "<strong>a. 系统性学习单证要素 + 逐项交叉核验：</strong><br>" +
+                   "跟单员必须精通信用证、贸易术语、报关元素。制作单证后，依据「核对清单」逐一比对：发票与箱单的总毛重/净重、件数、品名描述、金额、币种；确保所有单证数据与产品实物/订单完全一致。<br><br>" +
+                   "<strong>b. 建立单证档案室（分类归档/版本管理）：</strong><br>" +
+                   "对每一票订单的单证进行电子+纸质分类归档，不遗失、不损毁。重要变更（如产品包装更新）需同步更新所有相关单证版本，并作变更日志。<br><br>" +
+                   "<strong>c. 动态产品信息跟踪档案：</strong><br>" +
+                   "为每个产品SKU建立信息档案（尺寸、重量、材质、HS预归类），产品任何变动及时更新记录，确保所有单证基于最新版本数据制作。",
+            analysis: "💡 做法分析：<br>" +
+                      "• 核对清单及交叉核验极大降低人为错误概率，避免因微小数据差异导致清关灾难。分类归档保证了历史凭证可追溯，应对海关质疑时可快速举证。<br>" +
+                      "• 产品信息动态管理让跟单不依赖个人记忆，标准化输出。好处：节省改单费数千至数万元，提升通关效率，维护与客户、货代的信任关系。",
+            case: "📖 实际案例：<br>" +
+                  "浙江某出口公司报关一批机电产品，箱单净重误写为1250kg，实际净重1520kg，而提单沿用错误数据。到港后被海关查验发现重量不符，面临罚金且客户拒绝提货。后来公司实施“双人交叉核对+单证归档系统”，每次制单必须引用产品档案核重，后续200+订单零单证差错，客户满意度大幅提升。"
+        },
+        C: {
+            title: "避坑 THREE · 验货标准模糊 / 品质争议",
+            pit: "📌 什么坑？<br> 订单生产前未与客户明确验收标准（AQL值、材质工艺细节、功能测试要求），大货完成后客户验货判定“不合格”，要求返工或折扣赔偿。且缺乏过程品质记录与样品封样，导致责任难以界定，尾款纠纷频发。",
+            howTo: "✅ 如何避坑（具体做法）<br><br>" +
+                   "<strong>a. 前置拉通品质标准书 (Quality Standard File)：</strong><br>" +
+                   "下单前必须协同客户、工厂三方签署《品质验收标准协议》，明确抽样水平（如AQL 1.5/4.0）、外观/功能允收范围、测试方法及封样留底。标准书面化，杜绝模糊描述。<br><br>" +
+                   "<strong>b. 中期验货报告 + 第三方介入（如需）：</strong><br>" +
+                   "生产达到30%、70%、100%三个阶段安排中期验货, 保留图文/视频证据, 出具正式报告。发现偏差及时整改，避免最后出大货才暴雷。<br><br>" +
+                   "<strong>c. 封样管理及变更追溯：</strong><br>" +
+                   "双方确认的封样样品（产前样、确认样）详细记录存档，任何工艺/材料变更必须书面确认并重新封样，确保最终大货匹配封样品质。",
+            analysis: "💡 做法分析：<br>" +
+                      "• 品质标准前置化使所有参与方目标一致，减少事后争议，同时规避客户恶意压价索赔。中期分段验货将风险左移（早期识别），降低报废成本。<br>" +
+                      "• 封样管理提供客观仲裁依据，解决“公说公有理”的纠纷痛点。好处：减少品质退货率，尾款回收更顺畅，提升供应商配合度。",
+            case: "📖 实际案例：<br>" +
+                  "深圳贸易公司出口一批服装到欧洲，客户仅口头要求“做工好”，大货到港后客户投诉色差、线头多，要求30%折扣。后续该公司推行“三方品质标准书+中期验货”流程，并保留产前样照片。另一订单中，中期验货发现辅料色差，立即返工，避免了整柜报废，最终客户主动续单。"
+        }
+    };
+
+    // 渲染内容至页面，高级动态
+    function renderContent(selectedKey) {
+        const data = pitfallsData[selectedKey];
+        if (!data) return;
+
+        const html = `
+            <div class="insight-card">
+                <div class="pit-section">
+                    <div class="section-title"><span>⚠️</span> 1 · 识别陷阱</div>
+                    <div class="content-text">${data.pit}</div>
+                </div>
+                <div class="solution-section">
+                    <div class="section-title"><span>🛡️</span> 2 · 避坑实操方案</div>
+                    <div class="content-text">${data.howTo}</div>
+                </div>
+                <div class="analysis-section">
+                    <div class="section-title"><span>📈</span> 3 · 策略深度解析</div>
+                    <div class="content-text">${data.analysis}</div>
+                </div>
+                <div class="case-section">
+                    <div class="section-title"><span>💼</span> 4 · 真实场景案例</div>
+                    <div class="content-text">${data.case}</div>
+                </div>
+            </div>
+        `;
+        const container = document.getElementById('dynamicContent');
+        if (container) {
+            container.innerHTML = html;
+            // 平滑滚动回顶部(可选，提升体验，但不过分)
+            document.querySelector('.result-area')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    // 初始加载默认展示A（避坑ONE），符合用户预期
+    document.addEventListener('DOMContentLoaded', () => {
+        const selectEl = document.getElementById('topicSelect');
+        if (selectEl) {
+            // 确保初始值A被选中, 但以防html设置默认选中value="A"
+            const selectedValue = selectEl.value; // 应该是"A"
+            renderContent(selectedValue);
+        } else {
+            renderContent('A');
+        }
+
+        // 绑定查询按钮事件
+        const queryBtn = document.getElementById('queryBtn');
+        if (queryBtn) {
+            queryBtn.addEventListener('click', () => {
+                const selectEl = document.getElementById('topicSelect');
+                const selected = selectEl ? selectEl.value : 'A';
+                renderContent(selected);
+            });
+        }
+    });
+</script>
+</body>
+</html>
