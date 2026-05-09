@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>外贸客户投诉矩阵应对策略 | 紫晶神髓 · 策略引擎</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #eef2f8, #cfddee);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            overflow-x: hidden;
+        }
+
+        .dashboard {
+            max-width: 1500px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(3px);
+            border-radius: 3rem;
+            padding: 2rem;
+            box-shadow: 0 30px 50px -20px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.8);
+        }
+
+        .tool-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.7);
+        }
+        .title-section h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #5a2a7a, #9b4d96, #c77dff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .title-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        .title-section p {
+            color: #4a2a5e;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        /* 紫水晶区域 */
+        .crystal-stage {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0 0.5rem;
+        }
+        .trigger-badge {
+            background: linear-gradient(120deg, #6a3a8a, #4a2a6a);
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 60px;
+            color: #f0dcff;
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+        }
+        .trigger-badge i {
+            margin-right: 6px;
+            color: #ffd966;
+        }
+        .diamond-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 460px;
+            margin-bottom: 10px;
+        }
+        .crystal-core {
+            position: relative;
+            z-index: 20;
+            cursor: pointer;
+            transition: filter 0.2s, transform 0.2s;
+        }
+        .crystal-core:hover {
+            filter: drop-shadow(0 0 28px rgba(200, 130, 255, 0.7));
+            transform: scale(1.02);
+        }
+        .amethyst-svg {
+            width: 360px;
+            height: 360px;
+            display: block;
+            transition: all 0.2s;
+        }
+        .glow-rays {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 5;
+        }
+        .ray {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 65px;
+            background: linear-gradient(180deg, rgba(200,130,255,0) 0%, #d9aaff 50%, rgba(200,130,255,0) 100%);
+            transform-origin: 0% 0%;
+            border-radius: 2px;
+            animation: rayPulse 2.2s ease-in-out infinite;
+        }
+        @keyframes rayPulse {
+            0% { opacity: 0.3; transform: scaleY(0.7);}
+            50% { opacity: 1; transform: scaleY(1.15);}
+            100% { opacity: 0.3; transform: scaleY(0.7);}
+        }
+        .click-hint {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(0,0,0,0.06);
+            backdrop-filter: blur(6px);
+            padding: 6px 20px;
+            border-radius: 40px;
+            display: inline-block;
+            color: #4a2a6a;
+        }
+
+        .lines-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 15;
+        }
+        .lines-canvas svg {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .neuro-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0 1rem;
+            padding: 1rem 0.5rem;
+            min-height: 280px;
+            z-index: 10;
+        }
+        .neuro-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 1.2rem 1.6rem;
+            width: 210px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.2);
+            border: 1px solid rgba(200, 130, 255, 0.4);
+            animation: neuroBurst 0.5s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+        @keyframes neuroBurst {
+            0% { opacity: 0; transform: scale(0.1) translateY(60px); filter: blur(6px);}
+            60% { opacity: 0.95; transform: scale(1.05) translateY(-4px);}
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0);}
+        }
+        .neuro-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: white;
+            border-color: #b87cff;
+            box-shadow: 0 28px 38px -14px rgba(0,0,0,0.3);
+        }
+        .neuro-icon { font-size: 2.6rem; margin-bottom: 8px; }
+        .neuro-title { font-weight: 800; font-size: 1.2rem; margin-bottom: 4px; color: #4a2a6a; }
+        .neuro-badge { font-size: 0.7rem; color: #7b5a9a; }
+
+        .strategy-panel {
+            margin-top: 2rem;
+            background: rgba(255, 250, 255, 0.96);
+            backdrop-filter: blur(16px);
+            border-radius: 2rem;
+            padding: 1.8rem;
+            border: 1px solid rgba(200, 130, 255, 0.4);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+        }
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e0c8ff;
+            padding-bottom: 12px;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .close-panel {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #8a6aaa;
+        }
+        .logic-block {
+            background: #f3ecff;
+            padding: 1rem 1.4rem;
+            border-radius: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: #3a2a5a;
+            border-left: 4px solid #b87cff;
+        }
+        .template-selector {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .template-selector label {
+            font-weight: 700;
+            color: #5a3a7a;
+        }
+        .template-selector select {
+            background: white;
+            border: 1px solid #d0b0ff;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-family: 'Inter';
+            cursor: pointer;
+            min-width: 340px;
+        }
+        .query-btn {
+            background: #8a5aba;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .query-btn:hover {
+            background: #6a3a9a;
+        }
+        .email-display {
+            background: #f8f5ff;
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            border-left: 6px solid #b87cff;
+            margin-top: 0.5rem;
+        }
+        .email-display p {
+            font-size: 0.85rem;
+            line-height: 1.55;
+            white-space: pre-wrap;
+            font-family: 'Inter', monospace;
+        }
+        .lang-section {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed #d0b8ff;
+            position: relative;
+        }
+        .lang-tag {
+            font-size: 0.7rem;
+            background: #e8dcff;
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+            color: #5a3a7a;
+        }
+        .copy-btn {
+            background: #8a5aba;
+            border: none;
+            padding: 4px 12px;
+            border-radius: 30px;
+            color: white;
+            font-size: 0.7rem;
+            cursor: pointer;
+            float: right;
+            transition: 0.2s;
+            font-family: 'Inter';
+        }
+        .copy-btn:hover {
+            background: #6a3a9a;
+            transform: scale(1.02);
+        }
+        .hidden { display: none; }
+        .fadein { animation: fadeSlide 0.35s ease; }
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(12px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .watermark {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 1.5rem;
+            color: #8a6aae;
+        }
+        @media (max-width: 800px) {
+            .neuro-card { width: 170px; padding: 1rem; }
+            .template-selector select { min-width: 260px; }
+            .amethyst-svg { width: 280px; height: 280px; }
+            .diamond-container { min-height: 380px; }
+            .title-icon { width: 30px; height: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <div class="tool-header">
+        <div class="title-section">
+            <h1>
+                <span class="title-icon">
+                    <svg width="36" height="36" viewBox="0 0 40 40" fill="none">
+                        <polygon points="20,8 28,20 20,32 12,20" fill="url(#titleGemGrad)" stroke="#b87cff" stroke-width="1"/>
+                        <defs><linearGradient id="titleGemGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f0e6ff"/><stop offset="100%" stop-color="#a86ad4"/></linearGradient></defs>
+                    </svg>
+                </span>
+                外贸客户投诉矩阵应对策略
+            </h1>
+            <p>紫晶灵髓 · 策略引擎 | 一触即发 · 矩阵级专业策略库</p>
+        </div>
+    </div>
+
+    <div class="crystal-stage">
+        <div class="trigger-badge"><i class="fas fa-bolt"></i> 策略一触即发 · 点击紫水晶</div>
+        <div class="diamond-container" id="amethystContainer">
+            <div class="glow-rays" id="glowRays"></div>
+            <div class="crystal-core" id="amethystCore">
+                <svg class="amethyst-svg" viewBox="0 0 300 300" fill="none">
+                    <defs>
+                        <linearGradient id="amethystTop" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f8f0ff" stop-opacity="0.98"/><stop offset="100%" stop-color="#a86ad4" stop-opacity="0.55"/></linearGradient>
+                        <linearGradient id="amethystLeft" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#f0e6ff" stop-opacity="0.88"/><stop offset="100%" stop-color="#b878e8" stop-opacity="0.52"/></linearGradient>
+                        <linearGradient id="amethystRight" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8dcff" stop-opacity="0.9"/><stop offset="100%" stop-color="#c090e8" stop-opacity="0.58"/></linearGradient>
+                        <linearGradient id="amethystBottom" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#c9a8f0" stop-opacity="0.65"/><stop offset="100%" stop-color="#8a4ac8" stop-opacity="0.42"/></linearGradient>
+                        <filter id="amethystGlow"><feGaussianBlur in="SourceAlpha" stdDeviation="3.5"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                        <radialGradient id="highlightAmethyst" cx="35%" cy="35%" r="50%"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+                    </defs>
+                    <polygon points="150,45 200,80 150,115 100,80" fill="url(#amethystTop)" stroke="#d0b0ff" stroke-width="1.2"/>
+                    <polygon points="150,45 200,80 225,90 150,45" fill="url(#amethystLeft)" stroke="#d0b0ff" stroke-width="0.8" opacity="0.92"/>
+                    <polygon points="150,45 100,80 75,90 150,45" fill="url(#amethystRight)" stroke="#d0b0ff" stroke-width="0.8" opacity="0.92"/>
+                    <polygon points="200,80 225,90 185,115 150,115" fill="url(#amethystTop)" stroke="#d0b0ff" stroke-width="0.8" opacity="0.88"/>
+                    <polygon points="100,80 75,90 115,115 150,115" fill="url(#amethystTop)" stroke="#d0b0ff" stroke-width="0.8" opacity="0.88"/>
+                    <polygon points="150,115 200,80 240,150 150,200" fill="url(#amethystLeft)" stroke="#c8a8f0" stroke-width="1" opacity="0.85"/>
+                    <polygon points="150,115 100,80 60,150 150,200" fill="url(#amethystRight)" stroke="#c8a8f0" stroke-width="1" opacity="0.85"/>
+                    <polygon points="240,150 150,200 200,250 150,270 100,250 60,150" fill="url(#amethystBottom)" stroke="#c0a0e8" stroke-width="1" opacity="0.75"/>
+                    <polygon points="150,200 200,250 150,270" fill="#d8c0ff" stroke="#c0a0e8" stroke-width="0.8" opacity="0.65"/>
+                    <polygon points="150,200 100,250 150,270" fill="#d8c0ff" stroke="#c0a0e8" stroke-width="0.8" opacity="0.65"/>
+                    <ellipse cx="130" cy="85" rx="16" ry="9" fill="url(#highlightAmethyst)" transform="rotate(-20 130 85)" opacity="0.88"/>
+                    <ellipse cx="170" cy="85" rx="16" ry="9" fill="url(#highlightAmethyst)" transform="rotate(20 170 85)" opacity="0.88"/>
+                    <circle cx="140" cy="105" r="2.5" fill="#ffffff" opacity="0.9" filter="url(#amethystGlow)"/>
+                    <circle cx="160" cy="105" r="2.2" fill="#ffffff" opacity="0.85"/>
+                    <circle cx="150" cy="130" r="1.8" fill="#ffe0ff" opacity="0.7"/>
+                </svg>
+                <div class="click-hint"><i class="fas fa-hand-peace"></i> ⚡ 轻触紫晶 · 光芒绽放</div>
+            </div>
+            <div id="linesLayer" class="lines-canvas hidden"><svg id="connectionSvg" width="100%" height="100%"></svg></div>
+        </div>
+    </div>
+
+    <div id="neuroContainer" class="neuro-container hidden"></div>
+    <div id="strategyPanel" class="strategy-panel hidden">
+        <div class="panel-header"><h3 id="panelTitle"><i class="fas fa-gem"></i> 策略库</h3><button class="close-panel" id="closePanelBtn"><i class="fas fa-times-circle"></i></button></div>
+        <div id="panelBody"></div>
+    </div>
+    <div class="watermark"><i class="fas fa-gem"></i> 紫晶灵髓 · 矩阵应对 | 每个类别7个专业双语模板 | 英文邮件一键复制</div>
+</div>
+
+<script>
+    // ================= 邮件模板库：每个模块7个不同表述但思路一致的邮件 =================
+    const strategiesData = {
+        A: {
+            name: "产品质量投诉",
+            baseLogic: "【矩阵应对逻辑】1️⃣ 立即致歉安抚 → 2️⃣ 收集不良证据 → 3️⃣ 根源分析 → 4️⃣ 补偿/补货方案 → 5️⃣ 长期质量预防 → 6️⃣ 闭环回访。",
+            templates: [
+                { label: "初步致歉 + 专业调查请求", 
+                  cn: "尊敬的客户，对于此次产品质量问题，我们深表歉意。为尽快查明原因，恳请您提供不良品照片、视频以及生产批号。我方质量团队将在24小时内启动8D报告流程，并给出详细整改计划。感谢您的耐心。", 
+                  en: "Dear Valued Customer,\n\nWe sincerely apologize for the quality issue you have encountered. To facilitate a thorough investigation, we kindly request that you share defective product photos, videos, and the corresponding batch/lot number. Our Quality Assurance team will initiate an 8D report process within 24 hours and provide you with a detailed corrective action plan. We appreciate your patience and understanding." },
+                { label: "根本原因分析 + 补偿方案（版本A）", 
+                  cn: "经内部详细检查，问题根源已定位为[具体原因]。我方负全部责任。为弥补损失，我们将：1) 100%免费换货并承担特快运费；2) 对本次订单提供15%折扣或等值信用额度。", 
+                  en: "After an in-depth internal investigation, we have identified the root cause as [specific reason]. We take full responsibility. As compensation, we propose: 1) 100% free replacement with express shipping; 2) A 15% discount on this invoice or an equivalent credit note." },
+                { label: "根本原因分析 + 补偿方案（版本B）", 
+                  cn: "经质量团队彻查，不良品的根本原因是[具体原因]。我司对此负责并提供补偿：A) 安排同等数量新品空运补发；B) 本次订单总金额减免10%并赠送下次订单5%折扣券。", 
+                  en: "Our quality team has conducted a thorough investigation. The root cause is identified as [specific reason]. We accept full liability and offer: A) Air-ship replacement of equal quantity; B) 10% deduction on current invoice plus 5% discount coupon for next order." },
+                { label: "根本原因分析 + 补偿方案（版本C）", 
+                  cn: "我们已查明问题源于[具体原因]，对此致歉。补偿方案如下：立即重新生产优良品，DHL特快发出；当前发票直接抵扣12%货款，并附加信用额度$200。", 
+                  en: "We have identified the issue originated from [specific reason] and sincerely apologize. Our compensation: immediate reproduction of premium goods shipped via DHL Express; 12% deduction on current invoice plus $200 credit line for future orders." },
+                { label: "长期质量预防 + 体系升级", 
+                  cn: "我们已实施全新质检流程，引入AI视觉检测系统，并更新了供应商控制计划。附件为详细的整改报告与预防措施。后续批次严格符合国际标准。", 
+                  en: "We have implemented a comprehensive quality improvement plan, including AI-based visual inspection systems. Attached is our detailed corrective action report. Future shipments will strictly adhere to updated international standards." },
+                { label: "紧急空运补货 + 质量担保", 
+                  cn: "优质替换品已通过DHL/FedEx空运发出，追踪号已附。不良品退货运费由我司承担，附第三方检测报告。对于此次事件给您带来的不便，我们再次致歉。", 
+                  en: "Urgent: The premium replacement goods have been shipped via DHL/FedEx Express. Tracking number attached. Return shipping covered. Third-party inspection certificate attached." },
+                { label: "部分退款 + 贷记通知 + 未来折扣", 
+                  cn: "针对5%不良率，我们将在7个工作日内为您开立贷记通知单，或直接抵扣下笔订单金额。同时下笔订单额外享受8%折扣，感谢您的理解。", 
+                  en: "In response to the 5% defect rate, we will issue a credit note within 7 working days or apply a direct deduction. An extra 8% discount on next order will be added as goodwill." }
+            ]
+        },
+        B: {
+            name: "交期逾期投诉",
+            baseLogic: "【矩阵应对逻辑】1️⃣ 坦诚延迟原因 → 2️⃣ 明确修订交期 → 3️⃣ 每日/定期追踪同步 → 4️⃣ 提供折扣/空运补偿 → 5️⃣ 供应链改进承诺。",
+            templates: [
+                { label: "延迟致歉 + 修订交期承诺", 
+                  cn: "由于[具体原因]，订单将延误[X]天。新预计发货日为[日期]。我们承诺每日同步物流状态，该发票自动减免5%金额。", 
+                  en: "Due to [reason], the shipment will be delayed by [X] days. Revised ETD: [date]. Daily tracking updates provided. A 5% discount will be applied to this invoice." },
+                { label: "每日进度同步 + 透明化追踪", 
+                  cn: "今日订单状态：已装载至[船名/航班号]。提单/空运单副本见附件。每48小时主动更新直至清关。", 
+                  en: "Daily Update: Goods loaded onto [Vessel/Flight]. B/L attached. Proactive updates every 48 hours until customs clearance." },
+                { label: "空运部分货物补救方案（版本A）", 
+                  cn: "为缓解库存压力，我们免费将订单30%空运发出，余下70%海运。承担所有额外运费。", 
+                  en: "To ease inventory pressure, we will air-ship 30% of the order at our cost, remaining 70% by sea. All extra freight charges borne by us." },
+                { label: "空运部分货物补救方案（版本B）", 
+                  cn: "我方已安排紧急空运50%的首批货物，确保贵司生产线不停；剩余部分加速海运，全程保费由我司承担。", 
+                  en: "We have arranged emergency air shipment for 50% of the order to keep your production running; the balance will be expedited by sea with insurance covered by us." },
+                { label: "赔偿条款 + 未来准时交付保障", 
+                  cn: "本次订单扣除8%货款作为延迟罚金。未来合同加入逾期违约金条款（超5天按0.5%/日）。修订合同已附。", 
+                  en: "We will deduct 8% as penalty. Future contracts include liquidated damages (0.5%/day after 5 days). Revised contract attached." },
+                { label: "供应链升级与备货机制", 
+                  cn: "我司已为核心SKU设立专用安全库存，优化生产排程。订单下达将自动锁定产能，杜绝再次延误。", 
+                  en: "We have established safety stock for core SKUs and upgraded scheduling. Future orders will auto-reserve capacity to prevent recurrence." },
+                { label: "延迟赔偿 + 加急运费全免", 
+                  cn: "对于本次逾期，我们将承担全部加急运输费用，并额外提供订单总额8%的补偿以及优先排产标记。", 
+                  en: "For this delay, we will cover all expedited shipping costs, offer an 8% compensation on total value, and mark your orders for priority production." }
+            ]
+        },
+        C: {
+            name: "投诉业务员",
+            baseLogic: "【矩阵应对逻辑】1️⃣ 高层介入 + 快速致歉 → 2️⃣ 内部调查处理 → 3️⃣ 更换对接人或信用补偿 → 4️⃣ 专属服务升级 → 5️⃣ 定期回访。",
+            templates: [
+                { label: "高级管理层介入 + 致歉", 
+                  cn: "销售总监已亲自关注。资深全球客户经理[姓名]2小时内联系您。保证最高级别专业服务。", 
+                  en: "Our Sales Director has personally reviewed your complaint. Senior Global Account Manager will contact you within 2 hours." },
+                { label: "内部处理 + 信用额度致歉", 
+                  cn: "涉事人员已再培训并警告。为表歉意，添加$150信用额度，可用于未来订单。", 
+                  en: "The representative has been retrained and warned. A $150 credit added to your account." },
+                { label: "指定新对接人 + 专属服务", 
+                  cn: "即日起，[新客户经理]担任您的专属客户经理。每周一次策略会议，确保无缝沟通。", 
+                  en: "Effective immediately, [New Manager] will serve as your dedicated account manager. Weekly strategy call scheduled." },
+                { label: "赠礼 + 年度满意度计划", 
+                  cn: "下次出货随货附赠高端商务礼品，并启动季度客户满意度跟踪计划。", 
+                  en: "A premium gift will be included with your next shipment. Quarterly satisfaction tracking program initiated." },
+                { label: "高管专属关怀 + 定期回访", 
+                  cn: "我司副总裁将亲自监督服务改进，并每两周与您进行一次高层对话。同时提供专属服务热线。", 
+                  en: "Our VP will personally oversee service improvement and conduct bi-weekly executive calls. Dedicated hotline provided." },
+                { label: "更换整个服务团队 + 补偿培训", 
+                  cn: "我们决定更换为您服务的整个业务团队，并免费为贵司提供一次跨文化沟通培训课程。", 
+                  en: "We have decided to replace the entire service team assigned to you and provide a free cross-cultural communication training session." },
+                { label: "额外信用额度 + 永久服务经理", 
+                  cn: "我们为贵司账户添加$300专项服务基金，并为您指定一名终身服务经理以确保长期满意度。", 
+                  en: "We have added a $300 service fund to your account and appointed a lifetime service manager to ensure long-term satisfaction." }
+            ]
+        },
+        D: {
+            name: "沟通不良投诉",
+            baseLogic: "【矩阵应对逻辑】1️⃣ 承认沟通失误 → 2️⃣ 建立专属高效渠道 → 3️⃣ 制定SLA响应时限 → 4️⃣ 中英双语支持 → 5️⃣ 定期主动汇报。",
+            templates: [
+                { label: "响应时效升级 SLA承诺", 
+                  cn: "承诺工作时间内4小时内回复，紧急2小时。已创建WhatsApp专属群组，包含跟单和工程师。", 
+                  en: "SLA: response within 4 hours (2h urgent). Dedicated WhatsApp group created with coordinator & engineer." },
+                { label: "多语言协作平台", 
+                  cn: "已启用在线项目管理看板，中英双语客服7x24在线。可随时查看进度并留言。", 
+                  en: "Online project dashboard with bilingual support 24/7. Track progress and leave messages anytime." },
+                { label: "补偿 + 免费增值服务", 
+                  cn: "未来三笔订单免费提供物流协调与清关咨询服务。新版沟通SOP已附，每单设专职协调员。", 
+                  en: "Free logistics coordination & customs consulting for next 3 orders. Revised SOP attached, dedicated coordinator per order." },
+                { label: "定期周报机制", 
+                  cn: "每周五发送详细周报：生产实拍照片、订单状态图表、潜在风险预警。每周电话会议同步。", 
+                  en: "Weekly report every Friday: production photos, order charts, risk alerts. Weekly conference call for alignment." },
+                { label: "专属沟通经理 + 实时响应", 
+                  cn: "为您指派专属沟通经理（中英双语），工作时间内即时回复，任何问题直通负责人。", 
+                  en: "Dedicated bilingual communication manager assigned. Instant replies during business hours, direct escalation path." },
+                { label: "语音/视频会议 + 实时翻译", 
+                  cn: "我们开通了多语言视频会议通道，配备实时翻译。重大节点将主动发起线上会议确保信息同步。", 
+                  en: "Multilingual video conference channel with real-time translation available. Proactive online meetings for key milestones." },
+                { label: "24小时应急沟通热线 + 快速响应小组", 
+                  cn: "我们组建了专门快速响应小组，并提供中英文24小时热线，任何问题2小时内给出初步解决方案。", 
+                  en: "We have assembled a rapid response team and provide a 24/7 bilingual hotline. Initial solution provided within 2 hours for any issue." }
+            ]
+        }
+    };
+
+    // DOM 元素
+    const amethystCore = document.getElementById('amethystCore');
+    const amethystContainer = document.getElementById('amethystContainer');
+    const neuroContainer = document.getElementById('neuroContainer');
+    const strategyPanel = document.getElementById('strategyPanel');
+    const panelTitle = document.getElementById('panelTitle');
+    const panelBody = document.getElementById('panelBody');
+    const closePanelBtn = document.getElementById('closePanelBtn');
+    const linesLayer = document.getElementById('linesLayer');
+
+    let isExploded = false, currentCards = [];
+
+    function getAmethystCenterRelative() {
+        const cr = amethystContainer.getBoundingClientRect(), dr = amethystCore.getBoundingClientRect();
+        return { x: dr.left + dr.width/2 - cr.left, y: dr.top + dr.height/2 - cr.top };
+    }
+    function getCardConnectionPoint(card) {
+        const cr = amethystContainer.getBoundingClientRect(), crd = card.getBoundingClientRect();
+        return { x: crd.left + crd.width/2 - cr.left, y: crd.top - cr.top };
+    }
+    function drawLines(cards) {
+        if (!cards.length) return;
+        const svg = document.getElementById('connectionSvg'), cr = amethystContainer.getBoundingClientRect();
+        svg.setAttribute('width', cr.width); svg.setAttribute('height', cr.height);
+        const center = getAmethystCenterRelative();
+        svg.innerHTML = '';
+        cards.forEach(card => {
+            const point = getCardConnectionPoint(card);
+            const midX = (center.x + point.x)/2, offsetY = Math.abs(point.y - center.y)*0.28;
+            const path = document.createElementNS("http://www.w3.org/2000/svg","path");
+            path.setAttribute("d", `M ${center.x} ${center.y} C ${midX} ${center.y+offsetY}, ${midX} ${point.y-offsetY}, ${point.x} ${point.y}`);
+            path.setAttribute("stroke-width","2.8"); path.setAttribute("fill","none"); path.setAttribute("stroke-dasharray","5 5");
+            const grad = document.createElementNS("http://www.w3.org/2000/svg","linearGradient");
+            grad.id = `grad-${Math.random()}`; grad.setAttribute("x1","0%"); grad.setAttribute("y1","0%"); grad.setAttribute("x2","100%"); grad.setAttribute("y2","100%");
+            const stop1 = document.createElementNS("http://www.w3.org/2000/svg","stop"); stop1.setAttribute("offset","0%"); stop1.setAttribute("stop-color","#e0b0ff");
+            const stop2 = document.createElementNS("http://www.w3.org/2000/svg","stop"); stop2.setAttribute("offset","100%"); stop2.setAttribute("stop-color","#b87cff");
+            grad.appendChild(stop1); grad.appendChild(stop2); svg.appendChild(grad);
+            path.setAttribute("stroke", `url(#${grad.id})`); svg.appendChild(path);
+            const circle = document.createElementNS("http://www.w3.org/2000/svg","circle");
+            circle.setAttribute("cx", point.x); circle.setAttribute("cy", point.y); circle.setAttribute("r","5");
+            circle.setAttribute("fill","#c88eff"); circle.setAttribute("stroke","#f0e0ff"); svg.appendChild(circle);
+        });
+    }
+    function sparkEffect() {
+        const container = amethystContainer, rect = container.getBoundingClientRect();
+        for(let i=0;i<56;i++) {
+            const span = document.createElement('div');
+            span.style.cssText = `position:absolute; width:5px; height:5px; background:#d9aaff; border-radius:50%; pointer-events:none; left:${Math.random()*rect.width}px; top:${Math.random()*rect.height}px; animation:sparkFly 0.55s ease-out forwards; z-index:200;`;
+            container.appendChild(span); setTimeout(()=>span.remove(),600);
+        }
+        const style = document.createElement('style');
+        style.textContent = `@keyframes sparkFly{0%{opacity:0.9;transform:scale(1);}100%{opacity:0;transform:translate(${Math.random()*80-40}px,${Math.random()*80-40}px) scale(0);}}`;
+        document.head.appendChild(style); setTimeout(()=>style.remove(),700);
+    }
+
+    function neuroBurst() {
+        linesLayer.classList.remove('hidden');
+        const topics = [
+            { id: 'A', name: '产品质量投诉', sub: '矩阵·质检', icon: 'fas fa-clipboard-list', color: '#a86ad4', count: strategiesData.A.templates.length },
+            { id: 'B', name: '交期逾期投诉', sub: '矩阵·物流', icon: 'fas fa-calendar-times', color: '#a86ad4', count: strategiesData.B.templates.length },
+            { id: 'C', name: '投诉业务员', sub: '矩阵·培训', icon: 'fas fa-user-tie', color: '#a86ad4', count: strategiesData.C.templates.length },
+            { id: 'D', name: '沟通不良投诉', sub: '矩阵·沟通', icon: 'fas fa-comments', color: '#a86ad4', count: strategiesData.D.templates.length }
+        ];
+        neuroContainer.innerHTML = ''; const cards = [];
+        topics.forEach(t => {
+            const card = document.createElement('div'); card.className = 'neuro-card'; card.setAttribute('data-topic', t.id);
+            card.innerHTML = `<div class="neuro-icon"><i class="${t.icon}" style="color:${t.color}"></i></div><div class="neuro-title">${t.name}</div><div class="neuro-badge">${t.sub}</div><div style="margin-top:10px; font-size:0.7rem"><i class="fas fa-gem"></i> ${t.count} 种策略</div>`;
+            card.addEventListener('click', () => showPanelForTopic(t.id));
+            neuroContainer.appendChild(card); cards.push(card);
+        });
+        neuroContainer.classList.remove('hidden');
+        setTimeout(()=>drawLines(cards), 100);
+        sparkEffect();
+        document.querySelectorAll('.ray').forEach(r => { r.style.animation = 'none'; setTimeout(() => r.style.animation = 'rayPulse 2.2s ease-in-out infinite', 10); });
+        isExploded = true; currentCards = cards; strategyPanel.classList.add('hidden');
+        amethystCore.style.transform = "scale(0.97)"; setTimeout(()=>amethystCore.style.transform = "",150);
+    }
+    function resetAndBurst() { linesLayer.classList.add('hidden'); neuroContainer.classList.add('hidden'); strategyPanel.classList.add('hidden'); isExploded = false; neuroContainer.innerHTML = ''; document.getElementById('connectionSvg').innerHTML = ''; neuroBurst(); }
+
+    async function copyToClipboard(text, btn) {
+        try { await navigator.clipboard.writeText(text); const orig = btn.innerHTML; btn.innerHTML = '<i class="fas fa-check"></i> 已复制'; setTimeout(() => btn.innerHTML = orig, 1500); }
+        catch { const ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;top:-9999px'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); document.body.removeChild(ta); if(ok){ const orig=btn.innerHTML; btn.innerHTML='<i class="fas fa-check"></i> 已复制'; setTimeout(()=>btn.innerHTML=orig,1500);} else { btn.innerHTML='<i class="fas fa-times"></i> 失败'; setTimeout(()=>btn.innerHTML='<i class="far fa-copy"></i> 复制英文',1500); } }
+    }
+
+    function showPanelForTopic(topicId) {
+        const data = strategiesData[topicId]; if (!data) return;
+        panelTitle.innerHTML = `<i class="fas fa-gem"></i> ${data.name} · 矩阵应对策略库 (${data.templates.length}个专业模板)`;
+        let options = '<option value="">-- 请选择策略模板 --</option>';
+        data.templates.forEach((tpl, idx) => { options += `<option value="${idx}">${tpl.label}</option>`; });
+        const panelHtml = `
+            <div class="template-selector"><label><i class="fas fa-crown"></i> 投诉策略模板选择：</label><select id="templateSelect">${options}</select><button class="query-btn" id="queryTemplateBtn"><i class="fas fa-search"></i> 查询/同步</button></div>
+            <div id="logicArea" class="logic-block"><h4><i class="fas fa-brain"></i> 矩阵应对逻辑</h4><p>✨ 请先选择策略模板，然后点击「查询/同步」查看详细内容</p></div>
+            <div id="emailDisplayArea" class="email-display"><div style="text-align:center;">🔮 选择模板后点击查询按钮，展现专业中英文回复邮件</div></div>
+        `;
+        panelBody.innerHTML = panelHtml;
+        strategyPanel.classList.remove('hidden'); strategyPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        const qBtn = document.getElementById('queryTemplateBtn'), sel = document.getElementById('templateSelect'), logicDiv = document.getElementById('logicArea'), displayDiv = document.getElementById('emailDisplayArea');
+        qBtn.onclick = () => {
+            const idx = sel.value; if (idx === "") { logicDiv.innerHTML = `<h4><i class="fas fa-brain"></i> 矩阵应对逻辑</h4><p>⚠️ 请先选择一个策略模板。</p>`; displayDiv.innerHTML = `<div style="text-align:center; color:#b00020;">请选择有效模板</div>`; return; }
+            const tpl = data.templates[parseInt(idx)]; if(tpl){
+                logicDiv.innerHTML = `<h4><i class="fas fa-brain"></i> 矩阵应对逻辑</h4><p style="white-space:pre-wrap;">${data.baseLogic}</p>`;
+                displayDiv.innerHTML = `<div><span class="lang-tag">🇨🇳 中文</span><strong>${tpl.label}</strong></div><p>${tpl.cn.replace(/\n/g,'<br>')}</p><div class="lang-section"><div style="display:flex; justify-content:space-between;"><span class="lang-tag">🇬🇧 English</span><button class="copy-btn" id="copyEnBtn"><i class="far fa-copy"></i> 复制英文</button></div><p>${tpl.en.replace(/\n/g,'<br>')}</p></div>`;
+                const copyBtn = document.getElementById('copyEnBtn'); if(copyBtn){ const newBtn = copyBtn.cloneNode(true); copyBtn.parentNode.replaceChild(newBtn, copyBtn); newBtn.onclick = (e) => { e.preventDefault(); copyToClipboard(tpl.en, newBtn); }; }
+            }
+        };
+    }
+
+    amethystCore.addEventListener('click', () => { if(isExploded) resetAndBurst(); else neuroBurst(); });
+    closePanelBtn.addEventListener('click', () => strategyPanel.classList.add('hidden'));
+    (function createRays() { const container = document.getElementById('glowRays'); if(!container) return; container.innerHTML = ''; for(let i=0;i<24;i++){ const ray=document.createElement('div'); ray.className='ray'; const angle=i*15; const rad=angle*Math.PI/180, r=150; ray.style.transform=`translate(${Math.cos(rad)*r}px, ${Math.sin(rad)*r}px) rotate(${angle+90}deg)`; ray.style.animationDelay=`${i*0.08}s`; container.appendChild(ray); } })();
+</script>
+</body>
+</html>
